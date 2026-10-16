@@ -20,7 +20,18 @@ export async function GET(request: Request) {
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+    console.error("[auth.callback] Session exchange failed", JSON.stringify({
+      name: error.name,
+      code: error.code,
+      status: error.status,
+    }));
+    const reason = error.name === "AuthRetryableFetchError"
+      ? "network"
+      : error.code === "pkce_code_verifier_not_found"
+        ? "expired"
+        : "exchange";
+
+    return NextResponse.redirect(`${origin}/auth/auth-code-error?reason=${reason}`);
   }
 
   const forwardedHost = request.headers.get("x-forwarded-host");

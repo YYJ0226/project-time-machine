@@ -1,6 +1,21 @@
 import Link from "next/link";
 
-export default function AuthCodeErrorPage() {
+const messages: Record<string, string> = {
+  network: "登录服务暂时连接不上，请稍后重新登录。",
+  expired: "这次登录校验已失效，请返回登录页重新发起，并在同一浏览器完成授权。",
+  exchange: "这次登录未能完成，请返回登录页重新尝试。",
+};
+
+export const instant = false;
+
+export default async function AuthCodeErrorPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ reason?: string }>;
+}) {
+  const { reason } = await searchParams;
+  const message = messages[reason ?? "exchange"] ?? messages.exchange;
+
   return (
     <main
       style={{
@@ -20,8 +35,7 @@ export default function AuthCodeErrorPage() {
           GitHub 登录没有完成。
         </h1>
         <p style={{ color: "#91a3ad", lineHeight: 1.8 }}>
-          请检查 Supabase 的 GitHub Provider、回调地址和 Redirect URL
-          白名单，然后重新尝试。
+          {message}
         </p>
         <Link style={{ color: "#eaf2f5" }} href="/login">
           返回登录页

@@ -31,7 +31,14 @@ export async function requireGitHubUser() {
   } = await supabase.auth.getUser();
 
   if (error || !user) {
-    redirect("/login?error=session");
+    console.error("[auth.user] User verification failed", JSON.stringify({
+      name: error?.name,
+      code: error?.code,
+      status: error?.status,
+    }));
+    redirect(error?.name === "AuthRetryableFetchError"
+      ? "/login?error=network"
+      : "/login?error=session");
   }
 
   const githubLogin = extractGitHubLogin(user);

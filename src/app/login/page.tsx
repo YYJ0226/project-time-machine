@@ -6,6 +6,7 @@ import { LoginButton } from "./login-button";
 import styles from "./login.module.css";
 
 const loginErrors: Record<string, string> = {
+  network: "登录服务暂时连接不上，请稍后重试。",
   session: "登录状态已过期，请重新连接 GitHub。",
   "github-identity": "当前账号缺少 GitHub 身份信息，请重新授权。",
 };

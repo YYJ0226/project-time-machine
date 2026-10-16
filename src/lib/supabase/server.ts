@@ -2,10 +2,13 @@ import "server-only";
 
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 
 import { requireSupabasePublicConfig } from "@/lib/env";
 
 export async function createClient() {
+  // Auth SDKs read the clock and may retry requests; run them only for a real request.
+  await connection();
   const { url, publishableKey } = requireSupabasePublicConfig();
   const cookieStore = await cookies();
 
