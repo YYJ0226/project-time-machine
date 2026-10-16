@@ -70,11 +70,13 @@ export function filterOwnedPublicRepositories(
 }
 
 async function githubRequest<T>(path: string): Promise<T> {
+  const token = process.env.GITHUB_TOKEN?.trim();
   const response = await fetch(`https://api.github.com${path}`, {
     headers: {
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": GITHUB_API_VERSION,
       "User-Agent": "project-time-machine",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     cache: "no-store",
   });

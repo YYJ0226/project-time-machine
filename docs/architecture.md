@@ -67,6 +67,8 @@ Next.js App Router
 
 阶段二暂不保存 GitHub provider token。OAuth 仅用于核验 GitHub 身份，公开仓库列表通过 GitHub 公共 REST API 获取；导入时服务端重新检查仓库可见性与 owner。此设计避免在 MVP 初期持久化高敏感 Token，代价是受到 GitHub 未认证 API 请求额度限制。后续证据同步阶段再单独评估安全的授权与 Token 存储方案。
 
+阶段三继续只读取公开 API，通过手动同步采集最近 100 条 Issue、Commit、Pull Request 与 GitHub Actions workflow run。为避免 GitHub 未认证请求的低额度，部署环境可以配置仅服务端可见的只读 `GITHUB_TOKEN`；平台仍不保存用户的 provider token。原始证据与人工审阅状态分表保存，确定性规则只提出关联建议，不自动替用户确认项目叙事。字段与规则见 [项目证据模型](evidence-model.md)。
+
 ## 工程约束
 
 - Node.js 22 作为本地和 CI 的统一运行时。

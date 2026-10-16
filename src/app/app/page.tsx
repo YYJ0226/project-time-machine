@@ -252,6 +252,9 @@ export default async function WorkspacePage({
                     <strong>{project.name}</strong>
                     <p>{project.language || "未识别语言"}</p>
                     <small>导入于 {formatDate(project.imported_at)}</small>
+                    <Link href={`/app/projects/${project.id}`}>
+                      打开证据工作台
+                    </Link>
                   </div>
                 </article>
               ))}
