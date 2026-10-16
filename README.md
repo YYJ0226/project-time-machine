@@ -22,11 +22,13 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
   - Supabase SSR Cookie 会话与 GitHub OAuth 回调
   - 当前用户公开仓库浏览与服务端所有权核验
   - 项目导入、RLS 数据隔离与持久化
-- [ ] 阶段三：需求、提交、测试证据同步与关联（代码已完成，等待云端配置联调）
+- [x] 阶段三：需求、提交、测试证据同步与关联（真实仓库联调通过，等待用户验收）
   - Issue、Commit、Pull Request 与 GitHub Actions 手动同步
   - 统一证据模型、同步批次和 RLS 数据隔离
   - 基于编号引用、分支名和 SHA 的关联建议
   - 人工确认或拒绝关联建议
+  - 已确认/已忽略关系浏览与撤销审阅
+  - 证据正文展开、完整采集列表与同步失败提示
 - [ ] 阶段四：可交互时间线与项目回放
 - [ ] 阶段五：AI 辅助归纳、教师审阅与导出
 - [ ] 阶段六：质量加固、部署与演示视频
@@ -36,7 +38,9 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
 2026-10-16 联调记录：GitHub 登录已进入真实工作台，当前用户公开仓库可读取；
 课程仓库 `YYJ0226/project-time-machine` 已导入，服务重启及页面刷新后仍然保留。
 本地网络需要代理时，请按[配置说明](docs/setup-supabase.md#本地网络需要代理时)设置服务端代理。
-阶段三证据同步与关联仍需单独联调验收。
+阶段三已同步 27 条真实证据（3 条需求、13 条提交、3 个 PR、8 条 CI），
+确认了“需求 #3 → PR #4 → CI”及对应提交关系；重复同步保留人工决定，撤销审阅已验证。
+具体操作与边界见[阶段三验收记录](docs/phase-3-acceptance.md)。数量会随仓库后续开发增加。
 
 ## 核心角色
 
@@ -96,6 +100,7 @@ npm run build
 - [视觉方向](docs/visual-direction.md)
 - [Supabase 与 GitHub 登录配置](docs/setup-supabase.md)
 - [项目证据模型](docs/evidence-model.md)
+- [阶段三验收记录与演示步骤](docs/phase-3-acceptance.md)
 
 ## Git 协作约定
 
