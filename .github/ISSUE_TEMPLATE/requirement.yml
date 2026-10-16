@@ -1,0 +1,64 @@
+name: 功能需求
+description: 记录一个可验收的产品需求或课程目标
+title: "[Requirement]: "
+labels:
+  - requirement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请用用户能理解的语言描述需求。实现方案可以变化，但验收标准应当稳定、可验证。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 要解决的问题
+      description: 谁在什么场景下遇到了什么困难？
+      placeholder: 作为一名……，当我……时，我很难……
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 期望结果
+      description: 完成后，用户应该能做到什么？
+    validations:
+      required: true
+  - type: dropdown
+    id: audience
+    attributes:
+      label: 主要用户
+      options:
+        - 学生
+        - 教师或助教
+        - 学生与教师
+        - 项目维护者
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收标准
+      description: 请列出可以逐项检查的完成条件。
+      placeholder: |
+        - [ ] 当……时，页面应……
+        - [ ] 数据可以追溯到……
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 计划保留的证据
+      description: 哪些提交、测试、截图或文档可以证明需求已完成？
+  - type: dropdown
+    id: phase
+    attributes:
+      label: 所属阶段
+      options:
+        - 阶段一：工程与产品基线
+        - 阶段二：登录与项目导入
+        - 阶段三：证据同步与关联
+        - 阶段四：项目时间线
+        - 阶段五：AI、教师审阅与导出
+        - 阶段六：质量加固与发布
+    validations:
+      required: true
