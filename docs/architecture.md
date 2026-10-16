@@ -25,8 +25,8 @@ Next.js App Router
 | 模块 | 职责 | 计划阶段 |
 | --- | --- | --- |
 | Web Shell | 导航、页面框架、设计令牌、响应式布局 | 阶段一 |
-| Identity | GitHub OAuth、会话、用户边界 | 阶段二 |
-| Project Import | 选择并导入用户拥有的公开仓库 | 阶段二 |
+| Identity | Supabase SSR Cookie 会话、GitHub OAuth、用户边界 | 阶段二 |
+| Project Import | 读取公开 GitHub API，选择并导入用户拥有的公开仓库 | 阶段二 |
 | Evidence Sync | 同步 Issue、Commit、PR、测试状态 | 阶段三 |
 | Evidence Graph | 关联需求、实现、验证及人工说明 | 阶段三 |
 | Timeline | 时间线筛选、聚焦、证据详情 | 阶段四 |
@@ -64,6 +64,8 @@ Next.js App Router
 - AI 调用使用最少必要上下文，不发送密钥、完整环境变量或无关文件。
 - AI 原始输入默认不向教师展示；公开内容需要学生确认。
 - 所有服务端写操作都要验证项目所有权，不能只依赖前端隐藏按钮。
+
+阶段二暂不保存 GitHub provider token。OAuth 仅用于核验 GitHub 身份，公开仓库列表通过 GitHub 公共 REST API 获取；导入时服务端重新检查仓库可见性与 owner。此设计避免在 MVP 初期持久化高敏感 Token，代价是受到 GitHub 未认证 API 请求额度限制。后续证据同步阶段再单独评估安全的授权与 Token 存储方案。
 
 ## 工程约束
 
