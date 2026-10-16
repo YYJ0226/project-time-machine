@@ -277,7 +277,7 @@ export function TimelineExplorer({ items, links, projectName, initialEventId }: 
               <p className={styles.sourceBody}>{selected.summary || "源记录没有提供正文。"}</p>
             </details>
             <div className={styles.sourceActions}>
-              <a href={selected.source_url} target="_blank" rel="noreferrer">打开 GitHub 原文 ↗</a>
+              <a href={selected.source_url} target="_blank" rel="noreferrer">{selected.kind === "ai" ? "打开 AI 任务账本" : "打开 GitHub 原文 ↗"}</a>
               <button onClick={copyEventLink}>复制事件链接</button>
             </div>
             {copyMessage ? <p className={styles.copyMessage} role="status">{copyMessage}</p> : null}

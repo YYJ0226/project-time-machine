@@ -34,7 +34,7 @@ export const timeDescriptions: Record<TimelineKind, string> = {
   commit: "提交的作者时间；作者时间缺失时使用提交者时间。",
   pull_request: "PR 的合并、关闭或最近更新时间，不一定是创建时间。",
   check: "Actions 运行的最近更新时间，状态来自这次同步的快照。",
-  ai: "AI 记录的时间。AI 记录将在下一阶段接入。",
+  ai: "AI 调用任务的创建时间；状态来自当前任务账本，内容需人工审阅。",
 };
 
 export function prepareTimeline(items: TimelineItem[]) {
