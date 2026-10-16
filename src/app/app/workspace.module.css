@@ -419,6 +419,19 @@
   font-size: 0.61rem;
 }
 
+.projectRail article a {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--cyan);
+  font-size: 0.64rem;
+  text-decoration: none;
+}
+
+.projectRail article a:hover,
+.projectRail article a:focus-visible {
+  color: #b4fff8;
+}
+
 .setupShell {
   min-height: 100vh;
   display: grid;

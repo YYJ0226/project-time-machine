@@ -22,7 +22,11 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
   - Supabase SSR Cookie 会话与 GitHub OAuth 回调
   - 当前用户公开仓库浏览与服务端所有权核验
   - 项目导入、RLS 数据隔离与持久化
-- [ ] 阶段三：需求、提交、测试证据同步与关联
+- [ ] 阶段三：需求、提交、测试证据同步与关联（代码已完成，等待云端配置联调）
+  - Issue、Commit、Pull Request 与 GitHub Actions 手动同步
+  - 统一证据模型、同步批次和 RLS 数据隔离
+  - 基于编号引用、分支名和 SHA 的关联建议
+  - 人工确认或拒绝关联建议
 - [ ] 阶段四：可交互时间线与项目回放
 - [ ] 阶段五：AI 辅助归纳、教师审阅与导出
 - [ ] 阶段六：质量加固、部署与演示视频
@@ -85,6 +89,7 @@ npm run build
 - [阶段路线图](docs/roadmap.md)
 - [视觉方向](docs/visual-direction.md)
 - [Supabase 与 GitHub 登录配置](docs/setup-supabase.md)
+- [项目证据模型](docs/evidence-model.md)
 
 ## Git 协作约定
 

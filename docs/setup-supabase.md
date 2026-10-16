@@ -13,13 +13,14 @@
 
 ## 2. 创建数据库表
 
-打开 Supabase SQL Editor，执行以下迁移文件中的 SQL：
+打开 Supabase SQL Editor，按顺序执行以下迁移文件中的 SQL：
 
 ```text
 supabase/migrations/20261016000100_create_projects.sql
+supabase/migrations/20261016000200_create_evidence_graph.sql
 ```
 
-迁移会创建 `projects` 表、唯一约束、索引和 Row Level Security 策略。登录用户只能读写自己的项目。
+迁移会创建项目、同步批次、证据和证据关系表，并配置唯一约束、索引与 Row Level Security 策略。登录用户只能读写自己的项目数据。
 
 ## 3. 创建 GitHub OAuth App
 
@@ -65,6 +66,14 @@ Copy-Item .env.example .env.local
 NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<publishable-key>
 ```
+
+阶段三同步公开 GitHub 证据时，建议再配置一个只读 Token，避免未认证 API 的低请求额度：
+
+```dotenv
+GITHUB_TOKEN=<fine-grained-personal-access-token>
+```
+
+该变量只能用于服务端，不要添加 `NEXT_PUBLIC_` 前缀。Fine-grained Token 只选择需要演示的公开仓库，并将 `Actions`、`Contents`、`Issues`、`Pull requests` 设为 Read-only；不要授予写入、管理或无关私有仓库权限，也不要把真实 Token 提交到 Git。GitHub 的端点权限表是最终依据。
 
 重启开发服务器：
 
