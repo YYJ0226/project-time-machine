@@ -24,11 +24,12 @@ export default async function TimelinePage({ params, searchParams }: {
     return <main className={styles.shell}><p className={styles.warning} role="alert">暂时无法读取项目，请刷新重试。<Link href="/app">返回项目列表</Link></p></main>;
   }
   if (!project) notFound();
-  const [itemsResult, linksResult] = await Promise.all([
+  const [itemsResult, linksResult, runsResult] = await Promise.all([
     supabase.from("evidence_items").select("id,kind,title,summary,state,source_url,occurred_at", { count: "exact" })
       .eq("project_id", projectId).eq("owner_id", user.id).order("occurred_at", { ascending: false }).limit(1000),
     supabase.from("evidence_links").select("id,source_id,target_id,relation,reasons", { count: "exact" })
       .eq("project_id", projectId).eq("owner_id", user.id).eq("status", "confirmed").order("created_at", { ascending: false }).limit(1000),
+    supabase.from("ai_runs").select("id,status,review_status,model,created_at").eq("project_id", projectId).eq("owner_id", user.id).order("created_at", { ascending: false }).limit(100),
   ]);
   const query = await searchParams;
   const initialEventId = typeof query.event === "string" ? query.event : undefined;
@@ -38,6 +39,7 @@ export default async function TimelinePage({ params, searchParams }: {
       <header className={styles.pageHeader}>
         <Link href="/app" className={styles.brand}>◉ <strong>Project Time Machine</strong></Link>
         <Link href={`/app/projects/${projectId}`} prefetch={false}>返回证据工作台</Link>
+        <Link href={`/app/projects/${projectId}/delivery`} prefetch={false}>审稿与交付</Link>
       </header>
       <div className={styles.intro}>
         <p>{project.full_name}</p>
@@ -48,10 +50,11 @@ export default async function TimelinePage({ params, searchParams }: {
         {linksResult.error ? <p className={styles.warning} role="alert">关联关系暂时无法加载，本次仅展示事件；请刷新后重试。</p> : null}
         {(linksResult.count ?? 0) > (linksResult.data?.length ?? 0) ? <p className={styles.warning}>本次载入 {linksResult.data?.length} / {linksResult.count} 条已确认关系，其余关联未加载。</p> : null}
         {(itemsResult.count ?? 0) > (itemsResult.data?.length ?? 0) ? <p className={styles.warning}>本次展示最近 {itemsResult.data?.length} / {itemsResult.count} 条证据，更早记录未加载。</p> : null}
-        <TimelineExplorer key={initialEventId ?? "timeline"} items={(itemsResult.data ?? []) as TimelineItem[]} links={(linksResult.data ?? []) as TimelineLink[]}
+        {runsResult.error ? <p className={styles.warning}>AI 账本暂时无法读取；其他证据仍可浏览。</p> : null}
+        <TimelineExplorer key={initialEventId ?? "timeline"} items={[...(itemsResult.data ?? []) as TimelineItem[], ...(runsResult.data ?? []).map(run => ({ id: run.id, kind: "ai" as const, title: `AI 草稿任务 · ${run.model}`, summary: "真实调用记录。文字和人工审阅状态请在审稿与交付页面查看。", state: `${run.status} / ${run.review_status}`, source_url: `/app/projects/${projectId}/delivery`, occurred_at: run.created_at }))]} links={(linksResult.data ?? []) as TimelineLink[]}
           projectName={project.name} initialEventId={initialEventId} />
       </>}
-      <p className={styles.pageNote}>只展示已采集的真实记录；AI 泳道在下一阶段接入。返回证据工作台可同步最新数据。</p>
+      <p className={styles.pageNote}>只展示已采集的真实记录；AI 泳道显示最近 100 次真实调用，不把草稿当作事实。返回证据工作台可同步最新数据。</p>
     </main>
   );
 }
