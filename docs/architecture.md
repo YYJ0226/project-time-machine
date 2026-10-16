@@ -69,6 +69,15 @@ Next.js App Router
 
 阶段三继续只读取公开 API，通过手动同步采集最近 100 条 Issue、Commit、Pull Request 与 GitHub Actions workflow run。为避免 GitHub 未认证请求的低额度，部署环境可以配置仅服务端可见的只读 `GITHUB_TOKEN`；平台仍不保存用户的 provider token。原始证据与人工审阅状态分表保存，确定性规则只提出关联建议，不自动替用户确认项目叙事。字段与规则见 [项目证据模型](evidence-model.md)。
 
+阶段四新增 `/app/projects/[projectId]/timeline`：服务端验证用户与项目所有权后，从 Supabase
+读取最多 1000 条证据与 1000 条已确认关系；超过加载上限时显示范围提示。
+交给客户端的数据仅含标题、正文、类型、时间、状态、公开原文链接和已确认关系，不含 Token 或原始授权对象。
+
+时间排序、北京时间日期筛选、关键节点、共用坐标和碰撞错层逻辑放在纯函数模块 `src/lib/timeline.ts`，
+交互部分由独立 Client Component 管理。缩放、筛选、回放和关系跳转均在已加载快照中进行，
+不额外请求 GitHub、不写数据库；更新证据仍返回阶段三工作台手动同步。
+AI 泳道保留空状态，尚未引入 AI 模型服务。回放不是历史代码快照恢复。
+
 ## 工程约束
 
 - Node.js 22 作为本地和 CI 的统一运行时。

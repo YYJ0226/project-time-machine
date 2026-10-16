@@ -432,6 +432,10 @@
   color: #b4fff8;
 }
 
+.projectRail article a + a {
+  margin-left: 12px;
+}
+
 .setupShell {
   min-height: 100vh;
   display: grid;

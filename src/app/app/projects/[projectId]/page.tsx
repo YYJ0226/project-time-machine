@@ -266,6 +266,9 @@ export default async function EvidencePage({
           <span>@{githubLogin}</span>
           <span>{project.language || "未识别语言"}</span>
           <span>{project.default_branch}</span>
+          <Link href={`/app/projects/${project.id}/timeline`} prefetch={false}>
+            时间线与回放
+          </Link>
           <a href={project.html_url} target="_blank" rel="noreferrer">
             查看仓库
           </a>

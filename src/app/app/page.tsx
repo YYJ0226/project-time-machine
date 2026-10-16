@@ -255,6 +255,9 @@ export default async function WorkspacePage({
                     <Link href={`/app/projects/${project.id}`}>
                       打开证据工作台
                     </Link>
+                    <Link href={`/app/projects/${project.id}/timeline`} prefetch={false}>
+                      时间线与回放
+                    </Link>
                   </div>
                 </article>
               ))}
