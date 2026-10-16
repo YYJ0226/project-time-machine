@@ -18,6 +18,7 @@
 ```text
 supabase/migrations/20261016000100_create_projects.sql
 supabase/migrations/20261016000200_create_evidence_graph.sql
+supabase/migrations/20261016000300_create_delivery.sql
 ```
 
 迁移会创建项目、同步批次、证据和证据关系表，并配置唯一约束、索引与 Row Level Security 策略。登录用户只能读写自己的项目数据。
