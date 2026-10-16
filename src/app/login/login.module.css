@@ -1,0 +1,353 @@
+.shell {
+  --orbit: #07111f;
+  --instrument: #0d1c2c;
+  --frost: #eaf2f5;
+  --muted: #91a3ad;
+  --line: rgba(186, 213, 224, 0.17);
+  --violet: #8b91ff;
+  --amber: #f2b84b;
+  --cyan: #64d8d1;
+  min-height: 100vh;
+  padding: 0 max(24px, calc((100vw - 1360px) / 2));
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 73% 48%, rgba(86, 98, 178, 0.17), transparent 24rem),
+    linear-gradient(145deg, #07111f, #071522 64%, #050d18);
+  color: var(--frost);
+}
+
+.header {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand span {
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(100, 216, 209, 0.7);
+}
+
+.brand strong {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stage {
+  color: var(--amber);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+}
+
+.content {
+  min-height: calc(100vh - 82px);
+  display: grid;
+  grid-template-columns: minmax(320px, 0.88fr) minmax(450px, 0.72fr);
+  gap: clamp(60px, 10vw, 170px);
+  align-items: center;
+  padding: 70px 0;
+}
+
+.explanation {
+  max-width: 630px;
+}
+
+.signal {
+  margin: 0 0 24px;
+  color: var(--cyan);
+  font-size: 0.72rem;
+}
+
+.explanation h1 {
+  max-width: 10.5em;
+  margin: 0;
+  font-size: clamp(2.7rem, 5.1vw, 5rem);
+  font-weight: 550;
+  letter-spacing: -0.065em;
+  line-height: 1.04;
+}
+
+.intro {
+  max-width: 38rem;
+  margin: 28px 0 0;
+  color: #a1b1ba;
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 54px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.steps li {
+  min-width: 0;
+  padding: 20px 18px 0 0;
+}
+
+.steps > li > span {
+  color: #617681;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.62rem;
+}
+
+.steps strong {
+  display: block;
+  margin-top: 20px;
+  font-size: 0.78rem;
+  font-weight: 540;
+}
+
+.steps p {
+  margin: 8px 0 0;
+  color: #738994;
+  font-size: 0.68rem;
+  line-height: 1.6;
+}
+
+.gateway {
+  position: relative;
+  min-height: 570px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 42px;
+  border: 1px solid rgba(164, 187, 201, 0.28);
+  background:
+    linear-gradient(rgba(186, 213, 224, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(186, 213, 224, 0.035) 1px, transparent 1px),
+    rgba(8, 22, 35, 0.86);
+  background-size: 42px 42px;
+  box-shadow: 0 42px 110px rgba(0, 0, 0, 0.34);
+}
+
+.orbit {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  top: 55px;
+  left: 50%;
+  border: 1px solid rgba(139, 145, 255, 0.45);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow:
+    0 0 0 36px rgba(139, 145, 255, 0.035),
+    0 0 0 78px rgba(139, 145, 255, 0.02),
+    inset 0 0 55px rgba(116, 173, 255, 0.08);
+}
+
+.orbit::before,
+.orbit::after {
+  content: "";
+  position: absolute;
+  background: rgba(186, 213, 224, 0.18);
+}
+
+.orbit::before {
+  width: 1px;
+  height: 340px;
+  left: 50%;
+  top: -45px;
+}
+
+.orbit::after {
+  width: 340px;
+  height: 1px;
+  left: -45px;
+  top: 50%;
+}
+
+.orbit span {
+  position: absolute;
+  inset: 74px;
+  border: 1px solid var(--cyan);
+  border-left-color: transparent;
+  border-radius: 50%;
+  animation: rotate 7s linear infinite;
+}
+
+.orbit i {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  top: 19px;
+  right: 50px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 18px rgba(242, 184, 75, 0.9);
+}
+
+.gatewayCode {
+  position: relative;
+  margin: 0 0 10px;
+  color: #758a95;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.61rem;
+  letter-spacing: 0.08em;
+}
+
+.gateway h2 {
+  position: relative;
+  margin: 0;
+  font-size: 1.65rem;
+  font-weight: 540;
+  letter-spacing: -0.035em;
+}
+
+.gatewayCopy {
+  position: relative;
+  max-width: 30rem;
+  margin: 13px 0 0;
+  color: #899da7;
+  font-size: 0.78rem;
+  line-height: 1.65;
+}
+
+.loginAction {
+  position: relative;
+  margin-top: 27px;
+}
+
+.loginAction button {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 0;
+  background: var(--frost);
+  color: var(--orbit);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 590;
+}
+
+.loginAction button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.loginAction button:focus-visible,
+.brand:focus-visible,
+.setupNotice a:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 4px;
+}
+
+.loginAction svg {
+  width: 18px;
+  height: 18px;
+}
+
+.loginAction [role="alert"],
+.error {
+  position: relative;
+  margin: 12px 0 0;
+  color: #ffb3a9;
+  font-size: 0.7rem;
+}
+
+.setupNotice {
+  position: relative;
+  margin-top: 18px;
+  padding-left: 14px;
+  border-left: 2px solid var(--amber);
+}
+
+.setupNotice strong {
+  font-size: 0.7rem;
+}
+
+.setupNotice p,
+.privacyNote {
+  margin: 7px 0 0;
+  color: #728791;
+  font-size: 0.65rem;
+  line-height: 1.6;
+}
+
+.setupNotice code {
+  font-family: var(--font-geist-mono), monospace;
+}
+
+.setupNotice a {
+  display: inline-block;
+  margin-top: 7px;
+  color: var(--frost);
+  font-size: 0.66rem;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 980px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .gateway {
+    min-height: 530px;
+  }
+}
+
+@media (max-width: 620px) {
+  .shell {
+    padding-inline: 16px;
+  }
+
+  .stage {
+    display: none;
+  }
+
+  .content {
+    gap: 50px;
+    padding-top: 50px;
+  }
+
+  .explanation h1 {
+    font-size: clamp(2.55rem, 13vw, 4rem);
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+  }
+
+  .steps strong {
+    margin-top: 0;
+  }
+
+  .gateway {
+    min-height: 520px;
+    padding: 28px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit span {
+    animation: none;
+  }
+}
