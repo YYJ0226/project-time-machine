@@ -11,6 +11,12 @@ export async function proxy(request: NextRequest) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
     return response;
   }
+  if (
+    request.nextUrl.pathname !== "/app" &&
+    !request.nextUrl.pathname.startsWith("/app/") &&
+    request.nextUrl.pathname !== "/login"
+  )
+    return NextResponse.next();
   return updateSession(request);
 }
 

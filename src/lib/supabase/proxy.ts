@@ -31,7 +31,12 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  await supabase.auth.getClaims();
+  try {
+    await supabase.auth.getClaims();
+  } catch {
+    // A provider outage must not block the login screen. Protected handlers still
+    // independently call getUser; skipping refresh never grants authorization.
+  }
 
   return response;
 }

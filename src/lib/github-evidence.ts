@@ -78,6 +78,7 @@ async function githubEvidenceRequest<T>(
 ): Promise<T> {
   const token = process.env.GITHUB_TOKEN?.trim();
   const response = await fetch(`https://api.github.com${path}`, {
+    signal: AbortSignal.timeout(15000),
     headers: {
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": GITHUB_API_VERSION,

@@ -53,6 +53,7 @@ type SyncRun = {
 };
 
 export const instant = false;
+export const maxDuration = 120;
 
 const laneContent: Array<{
   key: string;

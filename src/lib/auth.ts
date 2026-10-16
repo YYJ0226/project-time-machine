@@ -25,20 +25,31 @@ export function extractGitHubLogin(user: User): string | null {
 
 export async function requireGitHubUser() {
   const supabase = await createClient();
+  let result;
+  try {
+    result = await supabase.auth.getUser();
+  } catch {
+    redirect("/login?error=network");
+  }
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser();
+  } = result;
 
   if (error || !user) {
-    console.error("[auth.user] User verification failed", JSON.stringify({
-      name: error?.name,
-      code: error?.code,
-      status: error?.status,
-    }));
-    redirect(error?.name === "AuthRetryableFetchError"
-      ? "/login?error=network"
-      : "/login?error=session");
+    console.error(
+      "[auth.user] User verification failed",
+      JSON.stringify({
+        name: error?.name,
+        code: error?.code,
+        status: error?.status,
+      }),
+    );
+    redirect(
+      error?.name === "AuthRetryableFetchError"
+        ? "/login?error=network"
+        : "/login?error=session",
+    );
   }
 
   const githubLogin = extractGitHubLogin(user);

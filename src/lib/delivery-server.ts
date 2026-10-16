@@ -11,7 +11,7 @@ import {
 
 export async function loadDelivery(projectId: string) {
   if (!UUID.test(projectId)) notFound();
-  const { supabase, user } = await requireGitHubUser();
+  const { supabase, user, githubLogin } = await requireGitHubUser();
   const { data: project, error } = await supabase
     .from("projects")
     .select("id,name,full_name,html_url,visibility")
@@ -85,6 +85,7 @@ export async function loadDelivery(projectId: string) {
   return {
     supabase,
     user,
+    githubLogin,
     project,
     items: items.data as DeliveryEvidence[],
     runs: runs.data,
