@@ -121,7 +121,10 @@ export async function syncEvidence(formData: FormData) {
           confidence: suggestion.confidence,
           reasons: suggestion.reasons,
         })),
-        { onConflict: "project_id,source_id,target_id,relation" },
+        {
+          onConflict: "project_id,source_id,target_id,relation",
+          ignoreDuplicates: true,
+        },
       );
 
       if (error) {
@@ -173,18 +176,24 @@ export async function reviewEvidenceLink(formData: FormData) {
   if (
     !projectId ||
     !linkId ||
-    (status !== "confirmed" && status !== "rejected")
+    (status !== "confirmed" && status !== "rejected" && status !== "suggested")
   ) {
     return;
   }
 
   const { supabase, user } = await requireGitHubUser();
-  await supabase
+  const { data, error } = await supabase
     .from("evidence_links")
-    .update({ status, reviewed_at: new Date().toISOString() })
+    .update({ status, reviewed_at: status === "suggested" ? null : new Date().toISOString() })
     .eq("id", linkId)
     .eq("project_id", projectId)
-    .eq("owner_id", user.id);
+    .eq("owner_id", user.id)
+    .select("id")
+    .maybeSingle();
+
+  if (error || !data) {
+    projectRedirect(projectId, "error", "审阅结果未能保存，请刷新后重试。");
+  }
 
   revalidatePath(`/app/projects/${projectId}`);
 }

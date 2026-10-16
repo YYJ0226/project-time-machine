@@ -165,7 +165,7 @@ export default async function WorkspacePage({
 
             {params.imported ? (
               <div className={styles.notice} role="status">
-                已导入 {params.imported}。仓库同步将在下一阶段开放。
+                已导入 {params.imported}。打开证据工作台，即可同步开发记录。
               </div>
             ) : null}
             {params.error ? (
@@ -260,7 +260,7 @@ export default async function WorkspacePage({
               ))}
               {!databaseError && projects.length === 0 ? (
                 <p className={styles.noProjects}>
-                  导入后的项目会出现在这里，并在下一阶段开始收集证据。
+                  导入后的项目会出现在这里，打开证据工作台即可收集开发记录。
                 </p>
               ) : null}
             </div>
