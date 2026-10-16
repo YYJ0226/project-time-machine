@@ -18,7 +18,7 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
   - “软件项目观测站”风格的响应式首页骨架
   - Issue / Pull Request 模板
   - GitHub Actions 持续集成
-- [ ] 阶段二：GitHub 登录与公开仓库导入（代码已完成，等待云端配置联调）
+- [x] 阶段二：GitHub 登录与公开仓库导入（云端联调通过，等待用户验收）
   - Supabase SSR Cookie 会话与 GitHub OAuth 回调
   - 当前用户公开仓库浏览与服务端所有权核验
   - 项目导入、RLS 数据隔离与持久化
@@ -32,6 +32,11 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
 - [ ] 阶段六：质量加固、部署与演示视频
 
 当前首页中的项目数据均为界面示例，不代表功能已经接入。
+
+2026-10-16 联调记录：GitHub 登录已进入真实工作台，当前用户公开仓库可读取；
+课程仓库 `YYJ0226/project-time-machine` 已导入，服务重启及页面刷新后仍然保留。
+本地网络需要代理时，请按[配置说明](docs/setup-supabase.md#本地网络需要代理时)设置服务端代理。
+阶段三证据同步与关联仍需单独联调验收。
 
 ## 核心角色
 
@@ -59,7 +64,8 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
 - Node.js 22
 - GitHub Actions
 
-后续阶段计划引入 Supabase、GitHub OAuth / REST API，以及 DeepSeek 的 OpenAI 兼容 API。具体依赖只在对应阶段确认后加入，避免第一阶段过度设计。
+当前已接入 Supabase、GitHub OAuth / REST API，服务端可选代理使用 Undici。
+后续阶段计划引入 DeepSeek 的 OpenAI 兼容 API，具体依赖在对应阶段确认后加入。
 
 ## 本地运行
 
