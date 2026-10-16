@@ -18,7 +18,10 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
   - “软件项目观测站”风格的响应式首页骨架
   - Issue / Pull Request 模板
   - GitHub Actions 持续集成
-- [ ] 阶段二：GitHub 登录与公开仓库导入
+- [ ] 阶段二：GitHub 登录与公开仓库导入（代码已完成，等待云端配置联调）
+  - Supabase SSR Cookie 会话与 GitHub OAuth 回调
+  - 当前用户公开仓库浏览与服务端所有权核验
+  - 项目导入、RLS 数据隔离与持久化
 - [ ] 阶段三：需求、提交、测试证据同步与关联
 - [ ] 阶段四：可交互时间线与项目回放
 - [ ] 阶段五：AI 辅助归纳、教师审阅与导出
@@ -71,6 +74,7 @@ npm run dev
 
 ```bash
 npm run lint
+npm run test
 npm run build
 ```
 
@@ -80,6 +84,7 @@ npm run build
 - [技术架构](docs/architecture.md)
 - [阶段路线图](docs/roadmap.md)
 - [视觉方向](docs/visual-direction.md)
+- [Supabase 与 GitHub 登录配置](docs/setup-supabase.md)
 
 ## Git 协作约定
 
