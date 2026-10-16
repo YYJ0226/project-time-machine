@@ -272,6 +272,7 @@ export default async function EvidencePage({
           <a href={project.html_url} target="_blank" rel="noreferrer">
             查看仓库
           </a>
+          <Link href={`/app/projects/${project.id}/delivery`} prefetch={false}>审稿与交付</Link>
         </div>
       </header>
 

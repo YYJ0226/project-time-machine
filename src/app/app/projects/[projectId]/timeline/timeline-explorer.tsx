@@ -238,7 +238,7 @@ export function TimelineExplorer({ items, links, projectName, initialEventId }: 
                   <div key={lane.id} className={styles.lane} style={{ height: lane.height, "--lane-color": lane.color } as CSSProperties}>
                     <div className={styles.laneLabel}><span>{lane.symbol}</span><strong>{lane.label}</strong><small>{lane.events.length} 条</small></div>
                     <div className={styles.lanePlot} style={{ width }}>
-                      {lane.events.length === 0 ? <p className={styles.emptyLane}>{lane.id === "ai" ? "AI 任务记录将在第五阶段接入" : "当前筛选下没有记录"}</p> : null}
+                      {lane.events.length === 0 ? <p className={styles.emptyLane}>{lane.id === "ai" ? "当前没有匹配的真实 AI 调用记录" : "当前筛选下没有记录"}</p> : null}
                       {lane.events.map((event) => {
                         const position = layout.positions.get(event.id)!;
                         const future = activePlayback && selected && event.timestamp > selected.timestamp;
