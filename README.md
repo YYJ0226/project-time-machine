@@ -1,177 +1,178 @@
-# Project Time Machine
+# Project Time Machine · 项目时光机
 
-> 面向 AI 辅助课程项目的全过程留痕、证据关联与可视化审阅平台。
+> 把课程项目的开发过程，变成一条可以回放、可以点回原文核对的证据链。
 
 [![CI](https://github.com/YYJ0226/project-time-machine/actions/workflows/ci.yml/badge.svg)](https://github.com/YYJ0226/project-time-machine/actions/workflows/ci.yml)
 
-Project Time Machine 不只是“项目做完后的展示页”。它希望把一个课程项目从需求提出、开发决策、代码提交、测试验证到最终交付的过程，组织成一条可回看、可核验、可讲述的证据时间线。
+**线上地址**：<https://project-time-machine.vercel.app>（首页观测区为样例数据，真实功能需 GitHub 登录后进入工作台）
 
-学生可以用它整理自己的开发过程，老师则可以通过只读链接快速理解“做了什么、为什么这样做、证据在哪里”。AI 只负责归纳和建议，不替用户篡改原始记录；AI 生成内容单独留痕，需人工确认后才能交付。
+---
 
-## 当前进度
+## 为什么做这个
 
-项目采用分阶段开发，每个阶段结束后先验收，再进入下一阶段。
+课程项目验收时，老师往往只看到最后的页面和一份汇报。真正的开发过程散落在 Issue、提交、Pull Request 和 CI 里，学生常常在截止前凭记忆把过程重新拼一遍。于是：
 
-- [x] 阶段一：工程与产品基线
-  - Next.js + TypeScript + Tailwind CSS 工程
-  - 产品定位、架构边界、阶段路线图
-  - “软件项目观测站”风格的响应式首页骨架
-  - Issue / Pull Request 模板
-  - GitHub Actions 持续集成
-- [x] 阶段二：GitHub 登录与公开仓库导入（云端联调通过）
-  - Supabase SSR Cookie 会话与 GitHub OAuth 回调
-  - 当前用户公开仓库浏览与服务端所有权核验
-  - 项目导入、RLS 数据隔离与持久化
-- [x] 阶段三：需求、提交、测试证据同步与关联（真实仓库联调通过）
-  - Issue、Commit、Pull Request 与 GitHub Actions 手动同步
-  - 统一证据模型、同步批次和 RLS 数据隔离
-  - 基于编号引用、分支名和 SHA 的关联建议
-  - 人工确认或拒绝关联建议
-  - 已确认/已忽略关系浏览与撤销审阅
-  - 证据正文展开、完整采集列表与同步失败提示
-- [x] 阶段四：可交互时间线与项目回放（已验收并合并）
-  - 同一时间坐标下的需求、代码、验证、AI 四条泳道
-  - 1×/2×/4× 缩放，类型、正文/SHA、日期与关键节点筛选
-  - 事件详情、原文、已确认关系导航与事件定位链接
-  - 单步/自动回放、速度和进度控制、录屏聚焦模式
-  - 响应式布局、键盘首尾/前后导航及减少动态效果支持
-- [x] 阶段五：AI 辅助归纳、教师审阅与导出（已验收并合并）
-  - DeepSeek 真实生成摘要、缺失证据提醒与视频草稿
-  - 调用账本、引用校验、人工编辑／确认／忽略
-  - 有期限、可撤销、无需教师登录的固定分享快照
-  - Markdown 报告与视频讲解提纲下载
-  - 真实 AI 调用记录接入时间线泳道
-- [ ] 阶段六：质量加固、部署与演示视频
-  - [x] 检查点 A：生产回调、安全响应头、AI 额度白名单、健康探针与隔离 HTTP 回归
-  - [x] 检查点 A：Vercel 发布手册、配置门禁及录屏讲稿（已验收合并）
-  - [x] 检查点 B：Vercel 账号授权、生产部署和匿名 HTTP 检查
-  - [x] 检查点 B：真实生产 GitHub 登录（本人在 Edge 确认成功）
-  - [x] 检查点 B：线上项目读取、同步、时间线与两种下载验收
-  - [x] 检查点 B：教师快照匿名访问与撤销、历史 AI 版本提醒
-  - [x] 检查点 B：线上关联确认／忽略／撤销与退出后项目、下载门禁
-  - [x] 检查点 B：首页登录／工作台入口修复并上线
-  - [ ] 检查点 B：排除并发操作后的重新登录稳定性、AI 人工审阅写入复核
-  - 手机／其他网络验收：本人明确暂不需要，延期，不计为通过
-  - [ ] 检查点 C：实际录屏、成片验收与正式版本发布
+- 老师很难低成本核对“我们先做了 A，再做了 B，测试都通过了”这类说法；
+- 学生事后拼出来的过程，往往“最像过程”，却不一定等于真实发生的过程。
 
-线上入口：[https://project-time-machine.vercel.app](https://project-time-machine.vercel.app)。
-2026-10-17 已部署到个人 Vercel Hobby 项目，公开首页、登录页与健康探针可访问；
-未登录工作台和下载权限限制已验证，本人已确认 Edge 生产 GitHub 登录成功。
-线上已核对真实项目同步至 63 条证据、3 条已确认关系保留、65 个时间线事件（含 2 次既有 AI 调用）。
-已验证筛选、回放、2× 缩放；本人确认两种 Markdown 均可下载并包含历史版本提示。
-临时教师快照已用无 Cookie、无保护绕过凭据请求访问，再由本人撤销并验证不可用；测试链接不入库。
-2026-10-17 追加核对：测试关联“需求 #14 → PR #15”完成确认、忽略和两次撤销，最终恢复为待确认 34、已确认 3、已忽略 0。
-退出后直接打开原项目及报告下载地址均被登录门禁拦截。首页现有“登录”和“进入工作台”入口，已在正式域名核对。
-重新登录的稳定性待排除并发操作后复核；AI 确认原文未改动。手机／其他网络验收按本人要求延期，不宣称全部业务或跨设备已通过。
-本次为 CLI 手动发布，尚未接通 Git 推送自动部署。线上暂未配置 DeepSeek 密钥，不能生成新 AI 草稿；本地配置不受影响。
-部署版本、检查结果与剩余事项见[阶段六检查点 B 记录](docs/phase-6b-acceptance.md)。
+Project Time Machine 不替老师判断项目好坏，只做一件事：**把已经存在的原始记录收拢、连起来，让每一句讲述都能点回 GitHub 原文**。机器只提建议，确认由学生来做，判断留给老师。
 
-当前首页中的项目数据均为界面示例，不代表功能已经接入。
+## 它做了什么
 
-2026-10-16 联调记录：GitHub 登录已进入真实工作台，当前用户公开仓库可读取；
-课程仓库 `YYJ0226/project-time-machine` 已导入，服务重启及页面刷新后仍然保留。
-本地网络需要代理时，请按[配置说明](docs/setup-supabase.md#本地网络需要代理时)设置服务端代理。
-阶段三已同步 27 条真实证据（3 条需求、13 条提交、3 个 PR、8 条 CI），
-确认了“需求 #3 → PR #4 → CI”及对应提交关系；重复同步保留人工决定，撤销审阅已验证。
-具体操作与边界见[阶段三验收记录](docs/phase-3-acceptance.md)。数量会随仓库后续开发增加。
+| 能力 | 说明 |
+| --- | --- |
+| GitHub 登录与仓库导入 | 只能导入当前账号自己拥有的公开仓库，服务端重新核验所有权和可见性 |
+| 证据同步 | 手动同步最近 100 条 Issue、Commit、Pull Request 和 GitHub Actions 运行记录 |
+| 统一证据结构 | 四类记录统一为同一种证据卡：类型、标题、状态、时间、原文链接 |
+| 关联建议 | 按 `#编号` 引用、分支名、提交 SHA 三条规则生成“需求 → 实现 → 验证”建议 |
+| 人工确认 | 学生逐条确认、忽略或撤销；重复同步不会覆盖人工决定 |
+| 时间线与回放 | 需求 / 代码 / 验证 / AI 四条泳道，支持缩放、筛选、关键节点、单步与自动回放 |
+| AI 草稿 | DeepSeek 只读取证据元数据生成摘要、缺失提醒和讲解稿，每句结论必须引用证据，引用会被校验 |
+| 版本提醒 | 若 AI 草稿生成时的证据与当前证据不一致，明确标注“历史 AI 版本”，保留原文不改写 |
+| 教师只读快照 | 免登录、可选 1 / 7 / 30 天有效期、随时可撤销；只包含已确认内容 |
+| 导出 | 课程过程报告与视频讲解提纲两种 Markdown |
 
-阶段四使用同一批真实证据，无需再次请求 GitHub 即可进入时间线。详情见[阶段四验收与演示](docs/phase-4-acceptance.md)。
-AI 泳道展示真实调用元数据，回放只浏览已采集证据，不还原完整历史状态或历史代码文件。
+## 工作流程
 
-阶段五从项目页或时间线进入“审稿与交付”。2026-10-16 已用 37 条缓存证据完成真实 DeepSeek 调用；
-草稿保留为待确认，供用户核对。未确认文字不会出现在教师快照和导出中。
-以上为阶段五当时记录；2026-10-17 线上已观察到本人此前确认的文字。本轮未再次确认、忽略或生成 AI 内容。
-教师页已用无 Cookie 请求验证，临时测试链接已撤销；两种 Markdown 下载均已验证。
-详见[阶段五配置与验收](docs/phase-5-acceptance.md)。**本地 localhost 分享链接仅当前电脑可用，公网部署属于阶段六。**
+```text
+GitHub 登录 → 导入公开仓库 → 手动同步证据 → 统一为证据卡
+  → 规则生成关联建议 → 学生确认 / 忽略
+  → 四泳道时间线与回放
+  → AI 草稿（带引用）→ 学生审阅确认
+  → 教师只读快照 / Markdown 导出
+```
 
-阶段六线上验收发现：旧 AI 文字使用 37 条输入，不能代表同步后的 63 条事实。
-已增加生成时间、输入条数与“历史 AI 版本”提示，覆盖交付页、教师页和两种 Markdown；
-保留学生已确认原文，不重新计费生成，不向公开页面暴露输入哈希。详见 [Issue #16](https://github.com/YYJ0226/project-time-machine/issues/16)。
+以本仓库自己的一条真实记录为例：
 
-首页入口遗漏修复见 [Issue #18](https://github.com/YYJ0226/project-time-machine/issues/18)，实际生产代码 `c5a6d1c`；
-新增 3 项首页回归后，共 102 项单元测试与 8 项隔离 HTTP 检查通过。首页观测区仍明确为样例，不冒充真实项目。
+1. [Issue #3](https://github.com/YYJ0226/project-time-machine/issues/3)「项目证据同步与关联」提出需求。
+2. [PR #4](https://github.com/YYJ0226/project-time-machine/pull/4) 正文写着 `Closes #3.`，包含两次提交，头提交为 `5458666`。
+3. 同一个 SHA 上的 GitHub Actions 检查通过，PR 合并为 `b82dc81`。
+4. 平台同步后自动给出三条建议：Issue #3 → PR #4（编号引用）、提交 → PR #4（SHA 一致）、PR #4 → CI（SHA 一致）。
+5. 学生确认后，虚线建议才变成已确认关系，并出现在时间线、教师快照与导出报告中。
 
-## 核心角色
+对应代码入口：
 
-### 学生
+| 环节 | 代码 |
+| --- | --- |
+| 导入与所有权核验 | [`src/app/app/actions.ts`](src/app/app/actions.ts) |
+| 同步与人工审阅 | [`src/app/app/projects/[projectId]/actions.ts`](src/app/app/projects/[projectId]/actions.ts) |
+| GitHub 拉取与归一化 | [`src/lib/github-evidence.ts`](src/lib/github-evidence.ts) |
+| 关联规则 | [`src/lib/evidence.ts`](src/lib/evidence.ts) |
+| 时间线 | [`src/lib/timeline.ts`](src/lib/timeline.ts) |
+| AI 生成与引用校验 | [`src/lib/deepseek.ts`](src/lib/deepseek.ts)、[`src/lib/delivery.ts`](src/lib/delivery.ts) |
+| 草稿审阅、分享、撤销 | [`src/app/app/projects/[projectId]/delivery/actions.ts`](src/app/app/projects/[projectId]/delivery/actions.ts) |
+| 教师只读页 | [`src/app/review/[token]/page.tsx`](src/app/review/[token]/page.tsx) |
 
-- 使用 GitHub 登录并导入自己的公开仓库。
-- 将需求、Issue、Commit、Pull Request、测试结果和 AI 使用记录串联起来。
-- 确认 AI 建议后再写入项目叙事。
-- 导出 Markdown 课程报告和视频讲解脚本。
+## 技术架构
 
-### 老师
+```text
+Browser
+  │
+  ▼
+Next.js 16 App Router（Vercel）
+  ├─ 学生工作台 / 时间线 / 审稿与交付
+  ├─ 教师只读快照页 /review/[token]
+  └─ Server Actions / Route Handlers
+        ├─→ GitHub OAuth + REST API（只读公开数据）
+        ├─→ Supabase Auth + PostgreSQL（RLS 行级隔离）
+        └─→ DeepSeek API（仅服务端调用）
+```
 
-- 无需注册，通过只读分享链接查看项目。
-- 沿时间线浏览关键决策、实现与验证结果。
-- 点击事件回到真实 GitHub 证据。
-- 区分原始事实、学生说明和 AI 生成摘要。
+| 层 | 选型 |
+| --- | --- |
+| 前端与服务端 | Next.js 16（App Router）、React 19、TypeScript、Tailwind CSS 4 |
+| 身份与数据 | Supabase Auth（GitHub OAuth、SSR Cookie 会话）、PostgreSQL + RLS |
+| 外部数据 | GitHub REST API |
+| AI | DeepSeek（OpenAI 兼容接口，服务端 Fetch） |
+| 部署 | Vercel（Node.js 22） |
+| 质量 | ESLint、Vitest、隔离生产 HTTP 回归、GitHub Actions |
 
-## 技术基线
+主要数据表：`projects`、`sync_runs`、`evidence_items`、`evidence_links`、`ai_runs`、`review_shares`，迁移见 [`supabase/migrations/`](supabase/migrations/)。
 
-- Next.js 16（App Router）
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- ESLint
-- Node.js 22
-- GitHub Actions
+## 安全与隐私边界
 
-当前已接入 Supabase、GitHub OAuth / REST API，服务端可选代理使用 Undici。
-DeepSeek 使用服务端 Fetch 调用；`pg` 仅用于开发时的数据库权限回归，不进入网页运行链路。
+- 只支持当前用户拥有的**公开**仓库；导入和每次同步都在服务端重新核验。
+- OAuth Token、GitHub Token、DeepSeek 密钥只在服务端使用，不进入浏览器或日志。
+- 所有写操作同时校验项目所有权与用户身份，并由数据库 RLS 兜底。
+- AI 只接收证据元数据（标题经脱敏），证据标题被视为不可信输入；引用不存在的证据即判失败、不入库。
+- 生产环境的 AI 调用仅对白名单 GitHub 账号开放，同一项目 60 秒内最多调用一次。
+- 分享链接为 32 字节随机令牌，数据库只保存其哈希；快照按白名单字段生成，不包含原始数据、AI 输入或提示词。
 
 ## 本地运行
 
-环境要求：Node.js 22、npm 10 或更高版本。
+环境要求：Node.js 22、npm 10+，以及一个配置了 GitHub OAuth 的 Supabase 项目。
 
 ```bash
 git clone https://github.com/YYJ0226/project-time-machine.git
 cd project-time-machine
 npm ci
+cp .env.example .env.local   # 填写 Supabase 地址与 Key，按需填写 GITHUB_TOKEN、DEEPSEEK_API_KEY
 npm run dev
 ```
 
-浏览器访问 [http://localhost:3000](http://localhost:3000)。
+浏览器打开 <http://localhost:3000>。Supabase、GitHub OAuth 与数据库迁移的配置步骤见 [docs/setup-supabase.md](docs/setup-supabase.md)；未配置 DeepSeek 密钥时，其余功能照常可用，页面会明确提示无法生成 AI 草稿。
 
-提交前建议执行：
+常用检查：
 
 ```bash
-npm run lint
-npm run test
-npm run build
-npm run test:http
-npm audit --omit=dev --audit-level=high
+npm run lint        # ESLint
+npm run test        # Vitest 单元测试
+npm run build       # 生产构建
+npm run test:http   # 隔离的生产 HTTP 回归
+```
+
+## 实验：用它记录它自己
+
+本项目全程用 Issue → 分支 → Pull Request → CI 的方式开发，并把自己导入平台作为验证案例：
+
+- 2026-10-16 10:25 至 10-17，共 48 次提交、11 个 Issue、9 个 Pull Request、37 次 GitHub Actions 运行（其中 2 次真实失败，已修复）。
+- 首次同步收回 27 条证据，并确认“需求 #3 → PR #4 → CI”这条链；线上验收时证据增长到 63 条。
+- 自用过程中发现并记录了真实问题：AI 草稿基于 37 条旧证据，称 PR #9 未合并，而当前证据显示已合并（[Issue #16](https://github.com/YYJ0226/project-time-machine/issues/16)），因此加入了“历史 AI 版本”提醒；退出登录后首页缺少登录入口（[Issue #18](https://github.com/YYJ0226/project-time-machine/issues/18)），已修复上线。
+
+各阶段的验收记录见下方文档索引。
+
+## 演示视频
+
+《开发的来路》：5 分钟、1080p、无旁白字幕片，按“动机 → 技术路线 → 实验 → 边界”展开，以本项目自身为案例。影片由代码逐帧绘制，工程在 [`video-vibe/`](video-vibe/README.md)，方法来自 [vibe-knowledge-film](https://github.com/HeyChengC/vibe-knowledge-film)。
+
+成片、音轨与字体体积较大，且背景音乐的公开传播授权未核实，因此**不提交到仓库**；可按 [video-vibe/README.md](video-vibe/README.md) 在本地复现渲染。分镜与验收见 [docs/vibe-full-film-storyboard.md](docs/vibe-full-film-storyboard.md)、[docs/vibe-full-film-acceptance.md](docs/vibe-full-film-acceptance.md)。
+
+## 局限与后续方向
+
+- **AI 泳道只记录平台自己的 DeepSeek 调用**，看不到学生在其他工具中的 AI 使用。
+- **不能证明代码由谁编写**，只整理公开仓库中已有的事实。
+- 关联规则只认 `#编号`、分支名和 SHA；不写引用的提交无法自动关联。规则中的置信度是固定常量，不是实测准确率。
+- 每次同步只取最近 100 条，暂不支持私有仓库。
+- 时间线回放只浏览已采集证据，不恢复历史代码或运行环境。
+- 尚未经过本项目以外的真实用户（同学、老师）使用验证。
+
+仍未关闭的事项：[Issue #17](https://github.com/YYJ0226/project-time-machine/issues/17)（退出后重新登录的会话稳定性，需在无并发操作条件下复核）；手机端与其他网络环境验收按计划延期；线上环境未配置 DeepSeek 密钥。
+
+## 项目结构
+
+```text
+src/app/            页面与 Server Actions（工作台、时间线、审稿交付、教师页、登录）
+src/lib/            核心逻辑：GitHub 拉取、证据归一化、关联规则、时间线、AI、交付快照
+src/components/     界面组件
+supabase/migrations 数据库表与 RLS 策略
+scripts/            HTTP 回归、数据库权限检查、发布配置检查、课程资料准备
+docs/               产品、架构、各阶段验收记录
+video-vibe/         演示影片工程（Canvas 逐帧渲染）
 ```
 
 ## 文档索引
 
-- [产品简述](docs/product-brief.md)
-- [技术架构](docs/architecture.md)
-- [阶段路线图](docs/roadmap.md)
-- [视觉方向](docs/visual-direction.md)
-- [Supabase 与 GitHub 登录配置](docs/setup-supabase.md)
-- [项目证据模型](docs/evidence-model.md)
-- [阶段三验收记录与演示步骤](docs/phase-3-acceptance.md)
-- [阶段四时间线验收与演示步骤](docs/phase-4-acceptance.md)
-- [阶段五配置、分享边界与验收步骤](docs/phase-5-acceptance.md)
-- [阶段六检查点 A 验收与剩余事项](docs/phase-6a-acceptance.md)
-- [阶段六检查点 B 线上部署与验收记录](docs/phase-6b-acceptance.md)
-- [Vercel 发布与回滚手册](docs/deploy-vercel.md)
-- [课程演示与录屏讲稿](docs/demo-script.md)
-- [安全检查与已知开发依赖告警](docs/security.md)
+- [产品简述](docs/product-brief.md) · [技术架构](docs/architecture.md) · [阶段路线图](docs/roadmap.md) · [证据模型](docs/evidence-model.md)
+- [Supabase 与 GitHub 登录配置](docs/setup-supabase.md) · [Vercel 发布与回滚](docs/deploy-vercel.md) · [安全检查](docs/security.md)
+- 阶段验收：[阶段三](docs/phase-3-acceptance.md) · [阶段四](docs/phase-4-acceptance.md) · [阶段五](docs/phase-5-acceptance.md) · [阶段六 A](docs/phase-6a-acceptance.md) · [阶段六 B](docs/phase-6b-acceptance.md)
+- 演示：[课程演示讲稿](docs/demo-script.md) · [录屏检查表](docs/recording-checklist.md) · [五分钟影片分镜](docs/vibe-full-film-storyboard.md) · [影片验收记录](docs/vibe-full-film-acceptance.md)
 
-## Git 协作约定
+## 开发约定
 
-- `main` 始终保持可构建。
-- 一次提交只表达一个清晰意图，使用 `feat:`、`fix:`、`docs:`、`chore:`、`test:` 等前缀。
-- 功能开发先建 Issue，再通过分支和 Pull Request 关联需求与实现。
-- Pull Request 合并前至少通过 lint 和 build。
-- 不提交密钥、访问令牌、私有仓库内容或含真实输入数据的完整 AI 请求。
-
-## 隐私边界
-
-首个可用版本仅支持导入当前用户拥有的公开 GitHub 仓库。教师分享页不展示 GitHub Token、环境变量、完整 AI 提示词或其他私密内容。
+- 每个功能先建 Issue，再通过分支和 Pull Request 关联需求与实现；`main` 始终保持可构建。
+- 提交信息使用 `feat:`、`fix:`、`docs:`、`test:`、`chore:` 等前缀，并引用对应 Issue。
+- 不提交密钥、访问令牌、私有仓库内容或含真实输入的完整 AI 请求。
 
 ## License
 
-本项目当前用于课程学习与展示，许可证将在发布前确定。
+本项目为课程学习与展示作品，暂未指定开源许可证。

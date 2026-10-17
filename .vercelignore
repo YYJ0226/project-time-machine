@@ -9,6 +9,9 @@ supabase/.temp
 coverage
 out
 build
+artifacts
+video
+video-vibe
 *.tsbuildinfo
 *.pem
 *.log
