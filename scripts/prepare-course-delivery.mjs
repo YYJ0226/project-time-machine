@@ -38,13 +38,9 @@ function git(root, args, encoding = "utf8") {
   });
 }
 
-function ensureDirectory(path) {
-  try {
-    mkdirSync(path);
-  } catch (error) {
-    if (error.code !== "EEXIST") throw error;
-  }
-  const stat = lstatSync(path);
+function assertExistingDirectory(path) {
+  const stat = lstatSync(path, { throwIfNoEntry: false });
+  if (!stat) return;
   if (
     stat.isSymbolicLink() ||
     !stat.isDirectory() ||
@@ -53,10 +49,25 @@ function ensureDirectory(path) {
     throw new Error("输出目录不是普通目录，已停止；不会跟随目录链接。");
 }
 
+function ensureDirectory(path) {
+  try {
+    mkdirSync(path);
+  } catch (error) {
+    if (error.code !== "EEXIST") throw error;
+  }
+  assertExistingDirectory(path);
+}
+
 export function prepareCourseDelivery(directory, now = new Date()) {
   const root = realpathSync(resolve(directory));
   if (realpathSync(git(root, ["rev-parse", "--show-toplevel"]).trim()) !== root)
     throw new Error("请在项目仓库根目录准备资料。");
+  const artifacts = join(root, "artifacts");
+  const parent = join(artifacts, "course-delivery");
+  // Inspect each existing parent before Git resolves a path beneath it. POSIX Git
+  // rejects pathspecs beyond symlinks before check-ignore can inspect the rule.
+  assertExistingDirectory(artifacts);
+  assertExistingDirectory(parent);
   if (git(root, ["status", "--porcelain", "--untracked-files=all"]).trim())
     throw new Error(
       "工作区尚未提交，请先检查并提交本阶段改动；不会自动提交或忽略文件。",
@@ -149,9 +160,7 @@ export function prepareCourseDelivery(directory, now = new Date()) {
   };
 
   // Validate all source files before creating any output. Each run is a fresh directory.
-  const artifacts = join(root, "artifacts");
   ensureDirectory(artifacts);
-  const parent = join(artifacts, "course-delivery");
   ensureDirectory(parent);
   const output = mkdtempSync(join(parent, "kit-"));
   for (const [path, content] of files) {
