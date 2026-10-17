@@ -186,6 +186,7 @@ npm run prepare:course
 - [阶段 6C2a 番茄钟实验与视频准备记录](docs/phase-6c2a-pomodoro.md)
 - [十五秒样片工程与预览说明](video/README.md)
 - [阶段 6C2b-1 样片与自案例验收记录](docs/phase-6c2b-sample.md)
+- [本人指定 vibe-knowledge-film 技能、BGM 与重做计划](docs/vibe-knowledge-film-adoption.md)
 - [安全检查与已知开发依赖告警](docs/security.md)
 
 ## Git 协作约定
