@@ -32,9 +32,7 @@ const evidenceLanes = [
     key: "AI",
     label: "AI",
     color: "blue",
-    nodes: [
-      { left: "63%", title: "生成阶段摘要", meta: "待人工确认" },
-    ],
+    nodes: [{ left: "63%", title: "生成阶段摘要", meta: "待人工确认" }],
   },
 ];
 
@@ -62,7 +60,11 @@ export default function Home() {
       <div className={styles.noise} aria-hidden="true" />
 
       <header className={styles.header}>
-        <a className={styles.brand} href="#top" aria-label="Project Time Machine 首页">
+        <a
+          className={styles.brand}
+          href="#top"
+          aria-label="Project Time Machine 首页"
+        >
           <span className={styles.brandMark} aria-hidden="true">
             <span />
           </span>
@@ -87,7 +89,10 @@ export default function Home() {
 
         <div className={styles.stage}>
           <span>当前阶段</span>
-          <strong>01 / 06</strong>
+          <strong>06 / B</strong>
+          <a className={styles.loginAction} href="/login">
+            登录
+          </a>
         </div>
       </header>
 
@@ -95,7 +100,7 @@ export default function Home() {
         <div className={styles.heroCopy}>
           <p className={styles.statusLine}>
             <span aria-hidden="true" />
-            工程基线已建立
+            GitHub 项目证据已接入
           </p>
           <h1>让一段开发历史，变成可核验的项目证据。</h1>
           <p className={styles.intro}>
@@ -104,17 +109,17 @@ export default function Home() {
           </p>
 
           <div className={styles.actions}>
-            <a className={styles.primaryAction} href="#observatory">
+            <a className={styles.primaryAction} href="/app">
+              进入工作台
+            </a>
+            <a className={styles.secondaryAction} href="#observatory">
               查看观测样例
               <span aria-hidden="true">⌄</span>
             </a>
-            <a
-              className={styles.secondaryAction}
-              href="https://github.com/YYJ0226/project-time-machine/blob/main/docs/roadmap.md"
-            >
-              阅读阶段计划
-            </a>
           </div>
+          <p className={styles.entryHint}>
+            未登录时将先连接 GitHub；已登录可直接浏览项目。
+          </p>
 
           <dl className={styles.scope}>
             <div>
@@ -201,8 +206,8 @@ export default function Home() {
       </section>
 
       <footer className={styles.footer}>
-        <span>Project Time Machine · Phase 01</span>
-        <p>当前页面是视觉与信息架构原型，业务数据接入将在后续阶段完成。</p>
+        <span>Project Time Machine · 线上验收</span>
+        <p>首页观测样例不代表你的项目数据；登录后进入真实项目工作台。</p>
       </footer>
     </main>
   );

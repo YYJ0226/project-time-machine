@@ -1,0 +1,8 @@
+{
+  "mode": "no narration",
+  "segments": [
+    { "text": "代码完成，不等于过程清楚。", "startMs": 500, "endMs": 3800 },
+    { "text": "把需求、实现和验证，连起来。", "startMs": 4000, "endMs": 8800 },
+    { "text": "一条可回看、可核验的时间线。", "startMs": 9000, "endMs": 14500 }
+  ]
+}

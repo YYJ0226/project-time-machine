@@ -12,7 +12,11 @@
   min-height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 76% 24%, rgba(84, 111, 166, 0.15), transparent 28rem),
+    radial-gradient(
+      circle at 76% 24%,
+      rgba(84, 111, 166, 0.15),
+      transparent 28rem
+    ),
     linear-gradient(135deg, #07111f 0%, #081522 52%, #06101c 100%);
   color: var(--frost);
 }
@@ -131,6 +135,7 @@
 
 .nav a:focus-visible,
 .brand:focus-visible,
+.loginAction:focus-visible,
 .actions a:focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 5px;
@@ -164,6 +169,23 @@
   color: var(--amber);
   font-size: 0.76rem;
   font-weight: 500;
+}
+
+.loginAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 18px;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.loginAction:hover {
+  background: var(--cyan);
+  color: var(--orbit);
 }
 
 .hero {
@@ -216,6 +238,7 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 18px;
   margin-top: 36px;
@@ -245,6 +268,13 @@
 .secondaryAction {
   padding: 0 4px;
   border-bottom: 1px solid rgba(234, 242, 245, 0.35);
+}
+
+.entryHint {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.7;
 }
 
 .scope {
@@ -359,7 +389,11 @@
   bottom: 0;
   left: 64%;
   width: 1px;
-  background: linear-gradient(transparent, rgba(242, 184, 75, 0.78), transparent);
+  background: linear-gradient(
+    transparent,
+    rgba(242, 184, 75, 0.78),
+    transparent
+  );
   box-shadow: 0 0 18px rgba(242, 184, 75, 0.22);
   animation: scan 5.8s ease-in-out infinite alternate;
 }
@@ -392,7 +426,12 @@
   position: relative;
   height: 1px;
   margin-right: 5px;
-  background: linear-gradient(90deg, rgba(186, 213, 224, 0.12), rgba(186, 213, 224, 0.28), rgba(186, 213, 224, 0.08));
+  background: linear-gradient(
+    90deg,
+    rgba(186, 213, 224, 0.12),
+    rgba(186, 213, 224, 0.28),
+    rgba(186, 213, 224, 0.08)
+  );
 }
 
 .rail::before,
@@ -430,7 +469,9 @@
   border: 3px solid var(--instrument);
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 0 1px currentColor, 0 0 16px currentColor;
+  box-shadow:
+    0 0 0 1px currentColor,
+    0 0 16px currentColor;
 }
 
 .eventNote {
@@ -640,6 +681,11 @@
   }
 
   .nav {
+    display: none;
+  }
+
+  .stage > span,
+  .stage > strong {
     display: none;
   }
 

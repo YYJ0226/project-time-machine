@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 vi.mock("server-only", () => ({}));
-import { aiInput, generateNarrative, inputHash } from "./deepseek";
+import {
+  aiInput,
+  generateNarrative,
+  inputHash,
+  narrativeBasis,
+} from "./deepseek";
 
 const id = "c522abbf-1dd9-48e5-bbd2-bed5fadd96d5";
 const input = [
@@ -12,6 +17,46 @@ const input = [
     occurred_at: "2026-10-16T00:00:00Z",
   },
 ];
+describe("narrative sample provenance", () => {
+  const items = input.map((item) => ({
+    ...item,
+    source_url: "https://github.com/student/demo",
+  }));
+  const run = {
+    created_at: "2026-10-16T00:00:00Z",
+    evidence_ids: [id],
+    input_hash: inputHash(aiInput(items)),
+  };
+  it("compares the saved input hash without calling a provider or changing the review", () => {
+    expect(narrativeBasis(items, run)).toEqual({
+      generatedAt: run.created_at,
+      inputCount: 1,
+      freshness: "matching",
+    });
+    expect(narrativeBasis(items, { ...run, input_hash: null }).freshness).toBe(
+      "unknown",
+    );
+  });
+  it.each([
+    { title: "updated title" },
+    { state: "merged" },
+    { occurred_at: "2026-10-17T00:00:00Z" },
+  ])(
+    "detects a changed sample even when the evidence count is unchanged: %o",
+    (change) => {
+      expect(narrativeBasis([{ ...items[0], ...change }], run).freshness).toBe(
+        "changed",
+      );
+    },
+  );
+  it("detects added input and does not mutate the saved generation metadata", () => {
+    const before = JSON.stringify(run);
+    expect(
+      narrativeBasis([...items, { ...items[0], id: "other" }], run).freshness,
+    ).toBe("changed");
+    expect(JSON.stringify(run)).toBe(before);
+  });
+});
 const good = {
   summary: "观察到提交 [E01]",
   gaps: "样本未显示用户测试，待核对",

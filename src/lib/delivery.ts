@@ -19,13 +19,23 @@ export type Narrative = {
   script: string;
   citations: string[];
 };
+export type NarrativeBasis = {
+  generatedAt: string;
+  inputCount: number;
+  freshness: "matching" | "changed" | "unknown";
+};
 export type ReviewSnapshot = {
   version: 1;
   capturedAt: string;
   project: { name: string; full_name: string; html_url: string };
   evidence: DeliveryEvidence[];
   links: DeliveryLink[];
-  narrative: null | { label: string; reviewedAt: string; content: Narrative };
+  narrative: null | {
+    label: string;
+    reviewedAt: string;
+    content: Narrative;
+    basis?: NarrativeBasis;
+  };
 };
 export const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -35,6 +45,13 @@ export const kindLabels = {
   pull_request: "PR",
   check: "验证",
 };
+export function narrativeVersionNotice(basis?: NarrativeBasis) {
+  if (basis?.freshness === "matching")
+    return "生成样本与当前 AI 输入一致；这不代表结论正确，也不代表覆盖全部证据。";
+  if (basis?.freshness === "changed")
+    return "历史 AI 版本：生成样本与当前证据不一致，旧文字可能已过时，不代表项目最新状态。请按来源事实复核。";
+  return "历史 AI 版本缺少样本版本信息，无法确认是否与当前证据一致。请按来源事实复核，不要将其当作最新结论。";
+}
 export function readableNarrative(content: Narrative): Narrative {
   const replace = (text: string) =>
     content.citations.reduce(
@@ -126,7 +143,11 @@ export function buildSnapshot(
   project: ReviewSnapshot["project"],
   evidence: DeliveryEvidence[],
   links: DeliveryLink[],
-  approved: null | { reviewedAt: string; content: Narrative },
+  approved: null | {
+    reviewedAt: string;
+    content: Narrative;
+    basis?: NarrativeBasis;
+  },
   now = new Date(),
 ): ReviewSnapshot {
   // Allowlist fields, never spread a database row (raw source_data and AI prompts must stay private).
@@ -162,6 +183,15 @@ export function buildSnapshot(
           label: "AI 生成，经学生编辑并确认；不代表原始事实",
           reviewedAt: approved.reviewedAt,
           content: parseNarrative(approved.content, ids),
+          ...(approved.basis
+            ? {
+                basis: {
+                  generatedAt: approved.basis.generatedAt,
+                  inputCount: approved.basis.inputCount,
+                  freshness: approved.basis.freshness,
+                },
+              }
+            : {}),
         }
       : null,
   };
@@ -183,9 +213,12 @@ export function exportMarkdown(
       .map((line) => `> ${plain(line)}`)
       .join("\n");
   const readable = narrative ? readableNarrative(narrative.content) : null;
+  const provenance = narrative
+    ? `${narrativeVersionNotice(narrative.basis)}\n\n${narrative.basis ? `生成时间：${narrative.basis.generatedAt}；生成输入：${narrative.basis.inputCount} 条。\n\n` : ""}`
+    : "";
   const body =
     narrative && readable
-      ? `## ${narrative.label}\n\n确认时间：${narrative.reviewedAt}\n\n${format === "report" ? `### 阶段摘要\n\n${quote(readable.summary)}\n\n### 待核对提醒（AI 推断）\n\n${quote(readable.gaps)}` : quote(readable.script)}\n\n引用证据：\n${narrative.content.citations.map((id, i) => `- 证据${i + 1}：${id}`).join("\n")}\n\n`
+      ? `## ${narrative.label}\n\n确认时间：${narrative.reviewedAt}\n\n${provenance}${format === "report" ? `### 阶段摘要\n\n${quote(readable.summary)}\n\n### 待核对提醒（AI 推断）\n\n${quote(readable.gaps)}` : quote(readable.script)}\n\n引用证据：\n${narrative.content.citations.map((id, i) => `- 证据${i + 1}：${id}`).join("\n")}\n\n`
       : `## 尚无人工确认的 AI 草稿\n\n${format === "script" ? "以下为固定录屏结构，不是 AI 生成稿：\n\n1. 介绍项目目的与仓库。\n2. 打开需求、提交、PR 和验证记录，说明原文在哪里。\n3. 沿已确认关系演示时间线与回放。\n4. 说明已完成部分、局限和下一步。\n\n" : "本报告仅整理原始证据，不把未确认草稿作为结论。\n\n"}`;
   return (
     intro +

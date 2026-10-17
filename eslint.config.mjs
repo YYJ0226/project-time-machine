@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     ".next-smoke/**",
     "out/**",
     "build/**",
+    "artifacts/**",
+    "video/**",
+    "video-vibe/**",
     "next-env.d.ts",
   ]),
 ]);

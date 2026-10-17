@@ -1,21 +1,43 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import { parseNarrative, redact, type DeliveryEvidence } from "./delivery";
+import {
+  parseNarrative,
+  redact,
+  type DeliveryEvidence,
+  type NarrativeBasis,
+} from "./delivery";
 
 export const PROMPT_VERSION = "delivery-v2-short-refs";
 export function aiInput(items: DeliveryEvidence[]) {
-  return items
-    .slice(0, 60)
-    .map((item) => ({
-      id: item.id,
-      kind: item.kind,
-      title: redact(item.title).slice(0, 300),
-      state: item.state,
-      occurred_at: item.occurred_at,
-    }));
+  return items.slice(0, 60).map((item) => ({
+    id: item.id,
+    kind: item.kind,
+    title: redact(item.title).slice(0, 300),
+    state: item.state,
+    occurred_at: item.occurred_at,
+  }));
 }
 export function inputHash(input: unknown) {
   return createHash("sha256").update(JSON.stringify(input)).digest("hex");
+}
+export function narrativeBasis(
+  items: DeliveryEvidence[],
+  run: {
+    created_at: string;
+    evidence_ids: string[];
+    input_hash: string | null;
+  },
+): NarrativeBasis {
+  return {
+    generatedAt: run.created_at,
+    inputCount: run.evidence_ids.length,
+    // A mismatch is conservative: even input ordering changes require source review.
+    freshness: !run.input_hash
+      ? "unknown"
+      : run.input_hash === inputHash(aiInput(items))
+        ? "matching"
+        : "changed",
+  };
 }
 export async function generateNarrative(
   input: ReturnType<typeof aiInput>,

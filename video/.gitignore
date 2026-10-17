@@ -1,0 +1,11 @@
+node_modules
+dist
+build/
+.DS_Store
+.env
+
+# Ignore the output video from Git but not videos you import into src/.
+out
+
+# Failed empty synthesis take retained locally, never part of delivery.
+public/audio/offline-v1/

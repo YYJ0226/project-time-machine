@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.12.0 <23"
   },
   "scripts": {
     "dev": "next dev",
@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:db": "node --env-file=.env.local scripts/check-delivery-db.mjs",
     "test:http": "node scripts/test-http.mjs",
+    "prepare:course": "node scripts/prepare-course-delivery.mjs",
     "check:release": "node --experimental-strip-types --env-file=.env.local scripts/check-release-env.mjs"
   },
   "dependencies": {
