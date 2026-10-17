@@ -11,7 +11,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:db": "node --env-file=.env.local scripts/check-delivery-db.mjs"
+    "test:db": "node --env-file=.env.local scripts/check-delivery-db.mjs",
+    "test:http": "node scripts/test-http.mjs",
+    "check:release": "node --experimental-strip-types --env-file=.env.local scripts/check-release-env.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
