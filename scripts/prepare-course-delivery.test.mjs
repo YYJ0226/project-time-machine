@@ -151,6 +151,10 @@ describe("course recording preparation package", { timeout: 20000 }, () => {
       join(root, "artifacts"),
       process.platform === "win32" ? "junction" : "dir",
     );
+    // POSIX Git does not match a symlink with the directory-only /artifacts/ rule.
+    // Ignore the link in this fixture only, so the later directory guard is reached.
+    writeFileSync(join(root, ".git", "info", "exclude"), "/artifacts\n");
+    expect(git(root, ["status", "--porcelain"]).trim()).toBe("");
     expect(() => prepareCourseDelivery(root)).toThrow("不会跟随目录链接");
     expect(readdirSync(external)).toEqual([]);
   });

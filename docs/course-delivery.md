@@ -24,7 +24,7 @@ npm run prepare:course
 命令要求先提交本阶段改动，且没有未提交或未跟踪文件；它不会自动提交、推送、登录、请求外部 API 或修改数据库。
 若拒绝脏工作区，先检查 `git status`，只提交你确认应进入仓库的内容；不要为让命令通过把环境文件加入 Git。
 
-每次生成 `artifacts/course-delivery/kit-<随机后缀>/`，不覆盖旧目录；整个 `artifacts` 已被 Git、ESLint 和 Vercel 上传忽略。
+每次生成 `artifacts/course-delivery/kit-<随机后缀>/`，不覆盖旧目录；整个 `artifacts` 已被 Git、ESLint、Vitest 和 Vercel 上传忽略。
 目录包含：
 
 ```text
