@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   quality:
-    name: Lint and build
+    name: Quality and production HTTP checks
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -40,3 +40,9 @@ jobs:
 
       - name: Build production bundle
         run: npm run build
+
+      - name: Run isolated production HTTP integration
+        run: npm run test:http
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high

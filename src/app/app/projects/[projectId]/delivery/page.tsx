@@ -6,6 +6,7 @@ import { SnapshotView } from "@/components/snapshot-view";
 import styles from "./delivery.module.css";
 
 export const instant = false;
+export const maxDuration = 120;
 export default async function DeliveryPage({
   params,
 }: {

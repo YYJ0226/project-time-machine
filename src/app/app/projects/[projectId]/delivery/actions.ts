@@ -3,6 +3,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { loadDelivery } from "@/lib/delivery-server";
+import { mayGenerateAI } from "@/lib/release-config";
 import { parseNarrative, restoreReferences, UUID } from "@/lib/delivery";
 import {
   aiInput,
@@ -24,13 +25,19 @@ export async function deliveryAction(
   if (!UUID.test(projectId)) return { message: "项目编号无效。" };
   const task = String(form.get("task"));
   // Keep authentication redirects outside the error boundary.
-  const { supabase, user, items, snapshot } = await loadDelivery(projectId);
+  const { supabase, user, githubLogin, items, snapshot } =
+    await loadDelivery(projectId);
   try {
     if (task === "generate") {
       if (!process.env.DEEPSEEK_API_KEY?.trim())
         return {
           message:
             "尚未配置 DEEPSEEK_API_KEY。请在本地 .env.local 中设置后重启服务。",
+        };
+      if (!mayGenerateAI(githubLogin, process.env))
+        return {
+          message:
+            "当前账号未被允许使用站点的 AI 额度。证据浏览、分享与导出不受影响。",
         };
       if (!items.length) return { message: "请先同步至少一条 GitHub 证据。" };
       const model = process.env.DEEPSEEK_MODEL?.trim() || "deepseek-flash";
@@ -188,17 +195,13 @@ export async function deliveryAction(
       if (![1, 7, 30].includes(days))
         return { message: "请选择 1、7 或 30 天有效期。" };
       const token = randomBytes(32).toString("base64url");
-      const { error } = await supabase
-        .from("review_shares")
-        .insert({
-          project_id: projectId,
-          owner_id: user.id,
-          token_hash: createHash("sha256").update(token).digest("hex"),
-          snapshot,
-          expires_at: new Date(
-            Date.now() + days * 86400000 - 1000,
-          ).toISOString(),
-        });
+      const { error } = await supabase.from("review_shares").insert({
+        project_id: projectId,
+        owner_id: user.id,
+        token_hash: createHash("sha256").update(token).digest("hex"),
+        snapshot,
+        expires_at: new Date(Date.now() + days * 86400000 - 1000).toISOString(),
+      });
       if (error) return { message: "快照链接创建失败，请刷新后重试。" };
       refresh(projectId);
       return {

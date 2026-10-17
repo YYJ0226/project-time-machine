@@ -52,6 +52,15 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 describe("delivery actions", () => {
+  it("blocks non-allowlisted production AI calls before writes or billing", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("DEEPSEEK_API_KEY", "test-key");
+    vi.stubEnv("AI_ALLOWED_GITHUB_USERS", "");
+    expect(
+      (await deliveryAction({ message: "" }, form("generate"))).message,
+    ).toContain("未被允许");
+    expect(mocks.from).not.toHaveBeenCalled();
+  });
   it("rejects invalid project IDs before any data access", async () => {
     const data = form("share");
     data.set("projectId", "invalid");

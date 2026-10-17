@@ -8,11 +8,13 @@ import { createClient } from "@/lib/supabase/server";
 const GITHUB_LOGIN_PATTERN = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/;
 
 export function extractGitHubLogin(user: User): string | null {
+  // Editable user metadata is never an authorization source.
+  const identity = user.identities?.find(
+    (identity) => identity.provider === "github",
+  );
   const candidates = [
-    user.user_metadata?.user_name,
-    user.user_metadata?.preferred_username,
-    user.identities?.find((identity) => identity.provider === "github")
-      ?.identity_data?.user_name,
+    identity?.identity_data?.user_name,
+    identity?.identity_data?.preferred_username,
   ];
 
   const login = candidates.find(
@@ -25,20 +27,31 @@ export function extractGitHubLogin(user: User): string | null {
 
 export async function requireGitHubUser() {
   const supabase = await createClient();
+  let result;
+  try {
+    result = await supabase.auth.getUser();
+  } catch {
+    redirect("/login?error=network");
+  }
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser();
+  } = result;
 
   if (error || !user) {
-    console.error("[auth.user] User verification failed", JSON.stringify({
-      name: error?.name,
-      code: error?.code,
-      status: error?.status,
-    }));
-    redirect(error?.name === "AuthRetryableFetchError"
-      ? "/login?error=network"
-      : "/login?error=session");
+    console.error(
+      "[auth.user] User verification failed",
+      JSON.stringify({
+        name: error?.name,
+        code: error?.code,
+        status: error?.status,
+      }),
+    );
+    redirect(
+      error?.name === "AuthRetryableFetchError"
+        ? "/login?error=network"
+        : "/login?error=session",
+    );
   }
 
   const githubLogin = extractGitHubLogin(user);

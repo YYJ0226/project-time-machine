@@ -35,13 +35,17 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
   - 事件详情、原文、已确认关系导航与事件定位链接
   - 单步/自动回放、速度和进度控制、录屏聚焦模式
   - 响应式布局、键盘首尾/前后导航及减少动态效果支持
-- [x] 阶段五：AI 辅助归纳、教师审阅与导出（已联调，等待用户验收）
+- [x] 阶段五：AI 辅助归纳、教师审阅与导出（已验收并合并）
   - DeepSeek 真实生成摘要、缺失证据提醒与视频草稿
   - 调用账本、引用校验、人工编辑／确认／忽略
   - 有期限、可撤销、无需教师登录的固定分享快照
   - Markdown 报告与视频讲解提纲下载
   - 真实 AI 调用记录接入时间线泳道
 - [ ] 阶段六：质量加固、部署与演示视频
+  - [x] 检查点 A：生产回调、安全响应头、AI 额度白名单、健康探针与隔离 HTTP 回归
+  - [x] 检查点 A：Vercel 发布手册、配置门禁及录屏讲稿（待用户验收）
+  - [ ] 检查点 B：Vercel 账号授权、正式部署与跨设备联调
+  - [ ] 检查点 B：实际录屏、成片验收与正式版本发布
 
 当前首页中的项目数据均为界面示例，不代表功能已经接入。
 
@@ -108,6 +112,8 @@ npm run dev
 npm run lint
 npm run test
 npm run build
+npm run test:http
+npm audit --omit=dev --audit-level=high
 ```
 
 ## 文档索引
@@ -121,6 +127,10 @@ npm run build
 - [阶段三验收记录与演示步骤](docs/phase-3-acceptance.md)
 - [阶段四时间线验收与演示步骤](docs/phase-4-acceptance.md)
 - [阶段五配置、分享边界与验收步骤](docs/phase-5-acceptance.md)
+- [阶段六检查点 A 验收与剩余事项](docs/phase-6a-acceptance.md)
+- [Vercel 发布与回滚手册](docs/deploy-vercel.md)
+- [课程演示与录屏讲稿](docs/demo-script.md)
+- [安全检查与已知开发依赖告警](docs/security.md)
 
 ## Git 协作约定
 
