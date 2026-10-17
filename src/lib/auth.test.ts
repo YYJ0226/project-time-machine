@@ -9,13 +9,19 @@ const mocks = vi.hoisted(() => ({
 vi.mock("server-only", () => ({}));
 vi.mock("@/lib/supabase/server", () => ({ createClient: mocks.create }));
 vi.mock("next/navigation", () => ({ redirect: mocks.redirect }));
-import { requireGitHubUser } from "./auth";
+import { extractGitHubLogin, requireGitHubUser } from "./auth";
+import type { User } from "@supabase/supabase-js";
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.create.mockResolvedValue({ auth: { getUser: mocks.getUser } });
 });
 afterEach(() => vi.restoreAllMocks());
 describe("authentication failure isolation", () => {
+  it("never grants identity from editable user metadata", () => {
+    const spoofed = { user_metadata: { user_name: "allowed-user" }, identities: [{ provider: "github", identity_data: { user_name: "actual-user" } }] } as unknown as User;
+    expect(extractGitHubLogin(spoofed)).toBe("actual-user");
+    expect(extractGitHubLogin({ ...spoofed, identities: [] })).toBeNull();
+  });
   it("redirects safely when the provider throws instead of returning an error", async () => {
     mocks.getUser.mockRejectedValue(new Error("upstream-private-message"));
     await expect(requireGitHubUser()).rejects.toThrow(
@@ -34,13 +40,13 @@ describe("authentication failure isolation", () => {
   });
   it("requires a GitHub identity from the verified server user", async () => {
     mocks.getUser.mockResolvedValue({
-      data: { user: { id: "owned", user_metadata: { user_name: "student" } } },
+      data: { user: { id: "owned", identities: [{ provider: "github", identity_data: { user_name: "student" } }] } },
       error: null,
     });
     expect((await requireGitHubUser()).githubLogin).toBe("student");
     mocks.getUser.mockResolvedValue({
       data: {
-        user: { id: "owned", user_metadata: { user_name: "invalid login" } },
+        user: { id: "owned", identities: [{ provider: "github", identity_data: { user_name: "invalid login" } }] },
       },
       error: null,
     });
