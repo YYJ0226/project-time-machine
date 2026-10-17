@@ -53,7 +53,9 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
   - [ ] 检查点 B：排除并发操作后的重新登录稳定性、AI 人工审阅写入复核
   - 手机／其他网络验收：本人明确暂不需要，延期，不计为通过
   - [x] 检查点 C1：录屏分镜、检查表与可复现课程资料准备包（已实现，待本人验收）
-  - [ ] 检查点 C2：实际录屏、成片验收与正式版本发布
+  - [x] 检查点 C2a：番茄钟 P1 真实测试／修复／CI 与官方视频技能准备（待本人桌面验收）
+  - [ ] 检查点 C2b：十至十五秒有声样片、后续实验与完整成片验收
+  - [ ] 检查点 C3：正式版本发布（另行确认）
 
 线上入口：[https://project-time-machine.vercel.app](https://project-time-machine.vercel.app)。
 2026-10-17 已部署到个人 Vercel Hobby 项目，公开首页、登录页与健康探针可访问；
@@ -180,6 +182,7 @@ npm run prepare:course
 - [录制前、成片回看及录后检查表](docs/recording-checklist.md)
 - [视频工具调查、六分半分镜与番茄钟实验计划](docs/video-production-plan.md)
 - [阶段 6C1 准备工具与验收记录](docs/phase-6c-preparation.md)
+- [阶段 6C2a 番茄钟实验与视频准备记录](docs/phase-6c2a-pomodoro.md)
 - [安全检查与已知开发依赖告警](docs/security.md)
 
 ## Git 协作约定

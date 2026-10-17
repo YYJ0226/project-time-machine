@@ -29,7 +29,7 @@ shotcraft 标注 Apache-2.0；talkcraft 标注非商业许可，Remotion 另有�
 
 “给学生整理开发历史的平台”是抽象概念；“我给番茄钟修了什么、老师如何查证”更容易理解。主角仍然是 Project Time Machine，番茄钟只是输入平台的实验对象，不能把视频做成番茄钟产品广告。
 
-已只读检查 [YYJ0226/pomodoro-timer](https://github.com/YYJ0226/pomodoro-timer)，基线提交 `4edfb9ae0998c8ef742407efffa5c06b3e032557`（提交时间 2026-07-01）。目前是 Python Tkinter 桌面应用，包含开始／暂停／重置、工作／休息、自定义时间、提示与内存完成计数；仓库当前仅四个文件，没有测试和 CI 文件。
+C1 调查时只读检查 [YYJ0226/pomodoro-timer](https://github.com/YYJ0226/pomodoro-timer)，基线提交 `4edfb9ae0998c8ef742407efffa5c06b3e032557`（提交时间 2026-07-01）。基线是 Python Tkinter 桌面应用，包含开始／暂停／重置、工作／休息、自定义时间、提示与内存完成计数；当时仓库仅四个文件，没有测试和 CI 文件。下列是当时观察，后续 P1 的实际结果单独记录。
 
 代码观察，不冒充已运行复现：
 
@@ -51,7 +51,9 @@ shotcraft 标注 Apache-2.0；talkcraft 标注非商业许可，Remotion 另有�
 不为了“三批”强行实现无必要功能；P2／P3在读完整本地环境后可收窄。长休息与统计二选一即可，优先围绕一个清晰故事，避免把小案例扩成第二个大型项目。
 每批正常提交，不倒签时间、不改写旧历史、不造空 CI，不把一个无意义改动拆成多个提交刷数量。需要失败用例时，在本地先运行并记录，再修复；不为了拍片故意让公开主分支 CI 失败。
 
-本轮尚未克隆或改动番茄钟、未创建其 Issue／PR、未导入新的线上项目。下一批计划本地目录为 `D:\vscode\pomodoro-timer`（当前不存在），保留原桌面定位，不重写为全新 Web 应用。
+C1 当时尚未改动番茄钟。C2a 已克隆至 `D:\vscode\pomodoro-timer`，完成 [Issue #1](https://github.com/YYJ0226/pomodoro-timer/issues/1) → 测试／修复／CI 三个提交 → [PR #2](https://github.com/YYJ0226/pomodoro-timer/pull/2)。修复前真实复现零值除零与设置部分生效；修复后 9 个测试方法通过，Windows Python 3.11/3.13 云端检查通过。PR 未合并、未导入 PTM 线上项目、未采集原生桌面录屏，P2/P3 未开始。
+
+官方 `remotion-best-practices` 已通过 skill-installer 安装，锁定上游 `1441a11e95db35443bd76bb318386c0d3ca00053`，下一轮可用；安装技能不等于安装 Remotion 渲染工程或生成影片。未下载大模型，未采用 shotcraft/talkcraft 的运行脚本。配音服务候选已发现，但尚无已确认连接或音轨。详见 [C2a 记录](phase-6c2a-pomodoro.md)。
 
 ## 六分半叙事与镜头
 
