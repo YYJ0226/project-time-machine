@@ -1,0 +1,25 @@
+{
+    "provider":  "Windows System.Speech offline synthesis",
+    "voice":  "Microsoft Huihui Desktop",
+    "rate":  2,
+    "networkCalls":  0,
+    "paidCalls":  0,
+    "finalVoiceAccepted":  false,
+    "segments":  [
+                     {
+                         "text":  "代码写完了，过程却散落在各处。",
+                         "file":  "audio/offline-v2/phrase-01.wav",
+                         "sha256":  "bacc1299d05bf0aeee302b4ea4a041c51cffe21924ed5413b2c8d0c69880cc13"
+                     },
+                     {
+                         "text":  "需求、提交、测试，怎样连成可信的开发过程？",
+                         "file":  "audio/offline-v2/phrase-02.wav",
+                         "sha256":  "873823c3b39444d502150cce117e24cf54ce9cbcbf5f0215f0bfda3be7eece88"
+                     },
+                     {
+                         "text":  "项目时光机，让每一步都可回看、可核验。",
+                         "file":  "audio/offline-v2/phrase-03.wav",
+                         "sha256":  "2c578fc16f6f92b10553c7c42df4cf119accb4df8e3d42231730eee8c1884419"
+                     }
+                 ]
+}

@@ -1,0 +1,33 @@
+{
+  "durationMs": 15000,
+  "sampleRate": 22050,
+  "provider": "Windows System.Speech offline synthesis",
+  "finalVoiceAccepted": false,
+  "sha256": "3a0ff6dc8ff4d158c6e3576c1f6277e7b790f0fff1d8c3326952dfb8478583e9",
+  "segments": [
+    {
+      "text": "代码写完了，过程却散落在各处。",
+      "startMs": 500,
+      "endMs": 3923.9455782312925,
+      "timestampMs": null,
+      "confidence": null,
+      "pageBreakAfter": true
+    },
+    {
+      "text": "需求、提交、测试，怎样连成可信的开发过程？",
+      "startMs": 4100,
+      "endMs": 9153.832199546485,
+      "timestampMs": null,
+      "confidence": null,
+      "pageBreakAfter": true
+    },
+    {
+      "text": "项目时光机，让每一步都可回看、可核验。",
+      "startMs": 9400,
+      "endMs": 13711.791383219956,
+      "timestampMs": null,
+      "confidence": null,
+      "pageBreakAfter": true
+    }
+  ]
+}

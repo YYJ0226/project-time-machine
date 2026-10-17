@@ -2,6 +2,8 @@
 
 日期：2026-10-17。状态：P1 代码、无界面回归及 Git 留痕完成；待本人桌面验收。无音频／MP4 成品，不将本检查点称为成片验收。
 
+后续本人已明确“番茄钟验收通过”，桌面验收待办据此完成；随后改选平台自身作为视频主案例，不继续番茄钟 P2/P3。下文保留 C2a 当时的交付快照，不视为最新制作计划；最新状态见 [C2b-1](phase-6c2b-sample.md)。
+
 ## 本次产出
 
 实验仓库位于 `D:\vscode\pomodoro-timer`，来自本人授权的 [YYJ0226/pomodoro-timer](https://github.com/YYJ0226/pomodoro-timer)，保留 Windows Tkinter 定位。原主分支未改写。
