@@ -15,6 +15,8 @@ Welcome to your Remotion project!
 
 实验主案例使用 Project Time Machine 自身的真实开发记录；不再为拍片扩展番茄钟。长片叙事遵循动机／需求 → 技术路线 → 实验展示，详见上级 `docs/demo-script.md`。
 
+本人最新指定**背景音乐＋字幕＋动态画面，不要配音讲解**。当前 `CourseOpening` 为无口播版，旧的系统合成语音只是保留的历史素材，不参与播放。
+
 ## 本地预览
 
 使用满足本目录 `package.json` engines 的 Node（当前验证环境为 Node 24）；在本目录终端执行：
@@ -31,11 +33,12 @@ npm run dev -- --port=3100
 ## 内容及配音边界
 
 - 画面为原创 HTML/CSS 概念动画，不是平台录屏；三类卡片没有伪造具体 Issue、提交或测试数量。
-- 口播使用 Windows 自带的 Microsoft Huihui Desktop 离线合成，占位音色不是最终神经 AI 配音。没有网络语音请求、收费调用或真人克隆。
-- 三段源 WAV 共约 12.79 秒，加入停顿后合成 `public/audio/offline-v2/opening.wav`，准确十五秒；末段在约 13.71 秒结束，保留收尾。
-- `timing.json` 保存实测 WAV 时长和 SHA-256；字幕为句级，不声称逐字 ASR 对齐。`Composition.tsx` 保留可编辑内联字幕数组，测试核对其与时间数据一致。
-- 没有背景音乐、外部字体、真人声音或真实教师分享链接。中文字体取当前 Windows 环境；Linux CI 只检查打包，不代表其他机器字体或渲染效果已验收。
-- 最终 AI 音色必须另行试听；只用免费或现有额度，收费前先询问本人。
+- 音乐为 `public/audio/music-v1/evidence-pulse.wav`：原创代码合成，128 BPM、32 拍、十五秒；没有现成歌曲采样、语音或网络调用。来源与 SHA-256 保存在同目录 provenance。
+- `scripts/generate-music.mjs` 保存确定性音序、和弦、合成音色、淡入淡出及电平处理，拒绝覆盖已有 take。最终六分钟长片需分章编排，不能机械循环这一段。
+- 字幕为视觉叙事短句，时间单独维护在 `visual-copy.json`；`Composition.tsx` 保留可编辑内联数组，测试检查文字与时间一致、每句至少三秒。
+- 旧 `offline-v2` 语音与 `narration.json` 仅为上一个检查版本的历史素材；不要求生成最终 AI 配音或连接账号。
+- 没有外部字体、真人声音或真实教师分享链接。中文字体取当前 Windows 环境；Linux CI 只检查打包，不代表其他机器字体或渲染效果已验收。
+- 只用免费或现有额度，任何收费前先询问本人。
 
 ## 验证和重新生成
 
@@ -45,9 +48,9 @@ npm test
 npm run build
 ```
 
-`lint` 包括 ESLint 与 TypeScript；`test` 执行七项 Node 测试，校验 PCM、截断、信号、合成音轨完整性与字幕。`build` 只打包 Studio/渲染资源，不导出 MP4。
+`lint` 包括 ESLint 与 TypeScript；`test` 执行九项 Node 测试，校验 PCM、截断、信号、历史音轨完整性、当前字幕、原创音乐和当前画面只引用音乐而不引用旧语音。`build` 只打包 Studio/渲染资源，不导出 MP4。
 
-源音频已随工程提供，运行预览或 CI 不需要 Windows 语音服务。需要另生成试听时（仅 Windows）：
+音乐已随工程提供，运行预览或 CI 不需要 Windows 语音服务。下方是**已停用语音草案的历史复现**，当前无需执行（仅 Windows）：
 
 ```powershell
 powershell.exe -NoProfile -File scripts/generate-local-voice.ps1 -Voice "Microsoft Huihui Desktop" -Take offline-new

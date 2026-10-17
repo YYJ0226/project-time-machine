@@ -276,31 +276,31 @@ const OpeningInner = () => {
         }}
       />
       <BasicCaptions
-        name="Measured phrase captions"
+        name="Visual story captions"
         width={1660}
         combineTokensWithinMilliseconds={0}
         style={{ position: "absolute", left: 130, top: 872 }}
         captions={[
           {
-            text: "代码写完了，过程却散落在各处。",
+            text: "代码完成，不等于过程清楚。",
             startMs: 500,
-            endMs: 3923.945578,
+            endMs: 3800,
             timestampMs: null,
             confidence: null,
             pageBreakAfter: true,
           },
           {
-            text: "需求、提交、测试，怎样连成可信的开发过程？",
-            startMs: 4100,
-            endMs: 9153.832199546485,
+            text: "把需求、实现和验证，连起来。",
+            startMs: 4000,
+            endMs: 8800,
             timestampMs: null,
             confidence: null,
             pageBreakAfter: true,
           },
           {
-            text: "项目时光机，让每一步都可回看、可核验。",
-            startMs: 9400,
-            endMs: 13711.791383,
+            text: "一条可回看、可核验的时间线。",
+            startMs: 9000,
+            endMs: 14500,
             timestampMs: null,
             confidence: null,
             pageBreakAfter: true,
@@ -318,7 +318,7 @@ const OpeningInner = () => {
           color: "#849aad",
         }}
       >
-        开场概念动画 · 非产品录屏 / 离线合成占位音色 · 非最终 AI 配音
+        概念动画 · 非产品录屏 / 原创合成配乐 · 无口播
       </Interactive.Div>
       <Interactive.Div
         name="Chapter marker"
@@ -334,8 +334,9 @@ const OpeningInner = () => {
         01 / MOTIVATION
       </Interactive.Div>
       <Audio
-        name="Offline scratch narration"
-        src={staticFile("audio/offline-v2/opening.wav")}
+        name="Original Evidence Pulse music"
+        src={staticFile("audio/music-v1/evidence-pulse.wav")}
+        volume={0.75}
       />
     </>
   );

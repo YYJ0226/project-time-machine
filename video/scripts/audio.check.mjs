@@ -68,7 +68,7 @@ test("scratch narration and captions match measured WAV assets", () => {
   }
 });
 
-test("inline Studio captions match generated timings and exact narration", () => {
+test("inline Studio captions match the current no-narration visual script", () => {
   const text = readFileSync(
     new URL("../src/Composition.tsx", import.meta.url),
     "utf8",
@@ -116,19 +116,47 @@ test("inline Studio captions match generated timings and exact narration", () =>
     ts.forEachChild(node, visit);
   };
   visit(source);
-  const metadata = JSON.parse(
-    readFileSync(
-      new URL("../public/audio/offline-v2/timing.json", import.meta.url),
-      "utf8",
-    ),
-  );
-  const narration = JSON.parse(
-    readFileSync(new URL("../narration.json", import.meta.url), "utf8"),
+  const visualCopy = JSON.parse(
+    readFileSync(new URL("../visual-copy.json", import.meta.url), "utf8"),
   );
   assert.equal(captions?.length, 3);
   for (const [index, caption] of captions.entries()) {
-    assert.equal(caption.text, narration.segments[index]);
-    assert.equal(caption.startMs, metadata.segments[index].startMs);
-    assert.ok(Math.abs(caption.endMs - metadata.segments[index].endMs) < 0.001);
+    assert.equal(caption.text, visualCopy.segments[index].text);
+    assert.equal(caption.startMs, visualCopy.segments[index].startMs);
+    assert.equal(caption.endMs, visualCopy.segments[index].endMs);
+    assert.ok(caption.endMs - caption.startMs >= 3000);
+    assert.ok(caption.endMs <= 15000);
   }
+});
+
+test("original music has the expected duration, provenance, headroom and fades", () => {
+  const folder = new URL("../public/audio/music-v1/", import.meta.url);
+  const bytes = readFileSync(new URL("evidence-pulse.wav", folder));
+  const metadata = JSON.parse(
+    readFileSync(new URL("provenance.json", folder), "utf8"),
+  );
+  const wav = readPcmWav(bytes);
+  assert.equal(wav.durationMs, 15000);
+  assert.equal(metadata.bpm, 128);
+  assert.equal((metadata.beats * 60) / metadata.bpm, 15);
+  assert.equal(
+    metadata.sha256,
+    createHash("sha256").update(bytes).digest("hex"),
+  );
+  assert.equal(metadata.samplesUsed, false);
+  assert.equal(metadata.paidCalls, 0);
+  assert.ok(wav.peak > 0.5 && wav.peak < 0.6);
+  assert.ok(wav.rms > 0.01);
+  assert.equal(wav.pcm.readInt16LE(0), 0);
+  assert.ok(Math.abs(wav.pcm.readInt16LE(wav.pcm.length - 2)) <= 2);
+});
+
+test("active composition plays music only, not retired narration", () => {
+  const source = readFileSync(
+    new URL("../src/Composition.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.match(source, /audio\/music-v1\/evidence-pulse\.wav/);
+  assert.doesNotMatch(source, /audio\/offline-v[0-9]+\//);
+  assert.match(source, /无口播/);
 });

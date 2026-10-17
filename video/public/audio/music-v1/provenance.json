@@ -1,0 +1,16 @@
+{
+  "title": "Evidence Pulse",
+  "purpose": "15-second no-narration concept audition",
+  "composition": "Original code-authored synthesizer sketch; no existing song intentionally reproduced",
+  "samplesUsed": false,
+  "externalAssets": false,
+  "networkCalls": 0,
+  "paidCalls": 0,
+  "bpm": 128,
+  "beats": 32,
+  "durationSeconds": 15,
+  "sampleRate": 44100,
+  "channels": 1,
+  "seed": 117,
+  "sha256": "c3c4a9580c3ad13122b264c285cedd6996621517482a6abd0608cbb99155ebbc"
+}
