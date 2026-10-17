@@ -1,0 +1,14 @@
+# Upload source, never local credentials or generated artifacts.
+.env*
+.vercel
+.git
+node_modules
+.next
+.next-smoke
+supabase/.temp
+coverage
+out
+build
+*.tsbuildinfo
+*.pem
+*.log
