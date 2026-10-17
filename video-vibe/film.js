@@ -1,111 +1,129 @@
-/* Original PTM storyboard. Quotes: Issue #3 / PR #4, checked 2026-10-17.
- * Paper animation is an explicitly labelled conceptual reenactment, not UI footage.
- * No production writes or invented approval states. */
+/* film.js — 《开发的来路》五分钟整片。
+ * 顺序：动机 → 技术路线 → 实验（以本项目为案例）→ 边界与结论。
+ * 分镜：docs/vibe-full-film-storyboard.md；事实表：docs/vibe-film-facts-and-hooks.md。
+ * 所有纸张动作是证据组织示意，不是产品真实录屏；真实界面只以截图出现。 */
 (async function () {
   'use strict';
-  const { lerp, ss } = VK;
-  const K = VKit;
-  const C = { ink: '#172b3b', paper: '#dedfd8' };
+  const { ss, fade } = VK;
+  const K = VKit, WS = window.WS;
+
   const SUBS = [
-    { a: 0.6, b: 5, zh: '只看最后的页面，看不见开发过程。' },
+    // 0–30 开场（三十秒样片原字幕）
+    { a: 0.6, b: 5.0, zh: '只看最后的页面，看不见开发过程。' },
     { a: 6.1, b: 10.2, zh: '这张需求单，写着要解决的问题。' },
     { a: 10.6, b: 15.4, zh: '这次修改，留下了{同一个编号}。' },
     { a: 15.8, b: 18.8, zh: '编号相同，就算证据吗？' },
     { a: 19.2, b: 23.4, zh: '核对原文，才能确认这条来路。' },
+    // 01 需（30–78）
+    { a: 30.5, b: 34.6, zh: '课程项目的最后，老师只收到一页成果。' },
+    { a: 35.0, b: 38.6, zh: '页能打开，过程不在上面。' },
+    { a: 39.0, b: 43.2, zh: '需求在 Issue，实现在提交，验证在检查里。' },
+    { a: 43.6, b: 47.6, zh: '三样东西，散在三个地方。' },
+    { a: 48.0, b: 51.8, zh: '学生只好在截止日前，把过程重新拼一遍。' },
+    { a: 52.2, b: 56.0, zh: '拼出来的，往往{最像}过程，却不等于过程。' },
+    { a: 56.4, b: 60.2, zh: '于是有了这条需求：先把证据{接起来}。' },
+    { a: 60.6, b: 64.8, zh: '需求、实现、验证，一条最小证据链。' },
+    { a: 65.2, b: 69.2, zh: '每一条，都能点回 GitHub 的原文。' },
+    { a: 69.6, b: 73.6, zh: '平台不替老师判断，只把材料摆齐。' },
+    // 02 线（78–150）
+    { a: 78.5, b: 82.5, zh: '整条链路，只有四个角色。' },
+    { a: 82.9, b: 86.9, zh: '浏览器、服务端、GitHub，和一本账本。' },
+    { a: 87.3, b: 91.3, zh: '服务端把四类记录，裁成同一种卡片。' },
+    { a: 91.7, b: 95.7, zh: '同步是手动的：最近一百条，条条可重查。' },
+    { a: 96.1, b: 100.1, zh: '卡片不自己连线，规则只提{建议}。' },
+    { a: 100.5, b: 104.5, zh: '编号、分支名、提交 SHA，三把钥匙。' },
+    { a: 104.9, b: 108.9, zh: '钥匙对上的是线索，不是结论。' },
+    { a: 109.3, b: 113.3, zh: '要等一个人按下确认，线才变金。' },
+    { a: 113.7, b: 117.7, zh: '确认之后，四类记录排上同一根轴。' },
+    { a: 118.1, b: 122.1, zh: '轴能{回放}，但回不到旧代码。' },
+    { a: 122.5, b: 126.5, zh: 'AI 只写草稿，每句话都要引用原文。' },
+    { a: 126.9, b: 130.9, zh: '草稿过人工确认，才允许交给老师。' },
+    { a: 131.3, b: 135.3, zh: '分享是一扇带期限的门，随时能关上。' },
+    { a: 135.7, b: 139.7, zh: '数据库里，每扇抽屉都有自己的锁。' },
+    // 03 验（150–262）
+    { a: 151.0, b: 155.0, zh: '实验只有一条：拿这个项目，走一遍全程。' },
+    { a: 155.4, b: 159.2, zh: '真的仓库：48 次提交、11 个 Issue、9 个 PR。' },
+    { a: 159.6, b: 163.6, zh: '第一次同步，收回{二十七条}证据。' },
+    { a: 164.0, b: 167.8, zh: 'Issue、提交、PR、检查，各成一摞卡片。' },
+    { a: 168.2, b: 172.2, zh: '规则先看见 #3 和 #4：正文写着 Closes #3。' },
+    { a: 172.6, b: 176.4, zh: 'PR #4 的检查：{一次}，通过。' },
+    { a: 176.8, b: 180.8, zh: '三张卡接成一条链，从需求走到验证。' },
+    { a: 181.2, b: 185.2, zh: '编号对上只是建议；金色来自人工确认。' },
+    { a: 185.6, b: 189.6, zh: '第二次同步，证据长到{六十三条}。' },
+    { a: 190.0, b: 193.8, zh: '四十八次提交，排上同一条轴。' },
+    { a: 194.2, b: 198.2, zh: '需求、实现、验证、AI，四条泳道。' },
+    { a: 198.6, b: 202.6, zh: '回放一遍，两天压成几分钟。' },
+    { a: 203.0, b: 206.8, zh: 'AI 从三十七条旧证据里，写出草稿。' },
+    { a: 207.2, b: 211.2, zh: '草稿说 #9 没合并，当前证据说已合并。' },
+    { a: 211.6, b: 215.6, zh: '这处错位被{留在页面上}，没有悄悄改。' },
+    { a: 216.0, b: 220.0, zh: '修法是标出生成时间与样本条数。' },
+    { a: 220.4, b: 224.2, zh: '旧快照冻结原文，新证据另起一行。' },
+    { a: 224.6, b: 228.4, zh: '老师打开链接，不登录，也看不到草稿。' },
+    { a: 228.8, b: 232.8, zh: '撤回之后，同一个地址什么都不返回。' },
+    { a: 233.2, b: 237.2, zh: '一百一十四项测试，八项生产回归。' },
+    { a: 237.6, b: 241.4, zh: '三十七次云端检查，两次真的失败。' },
+    { a: 241.8, b: 245.6, zh: '失败停在准备脚本，修复后重新通过。' },
+    { a: 246.0, b: 250.0, zh: '这些数字都能点回链接，不靠自述。' },
+    // 04 界（262–300）
+    { a: 264.0, b: 268.0, zh: '它仍不恢复旧环境，也不替谁拍板。' },
+    { a: 268.4, b: 272.4, zh: '建议、草稿、回放，都只是可核对的材料。' },
+    { a: 272.8, b: 276.6, zh: '没做完的，也写在同一条来路上。' },
+    { a: 277.0, b: 280.8, zh: '手机端、完整成片，和一处未定的会话。' },
+    { a: 281.2, b: 285.0, zh: '首页的观测样例，明确标着样例数据。' },
+    { a: 285.4, b: 289.2, zh: '一段开发历史，可以被重新走一遍。' },
+    { a: 289.6, b: 293.6, zh: '但每一步，都要回到它自己的原文。' },
   ];
-  const home = new Image();
-  home.src = 'assets/product-home-local.png';
-  await home.decode();
-  function text(x, s, px, py, size = 30, color = C.ink, family = 'VK Sans', weight = 400) {
-    x.fillStyle = color; x.font = `${weight} ${size}px "${family}"`;
-    x.textAlign = 'left'; x.textBaseline = 'middle'; x.fillText(s, px, py);
-  }
-  function line(x, x1, y1, x2, y2, color, width = 2) {
-    x.strokeStyle = color; x.lineWidth = width;
-    x.beginPath(); x.moveTo(x1, y1); x.lineTo(x2, y2); x.stroke();
-  }
-  function paper(x, px, py, w, h) {
-    x.save(); x.shadowColor = '#000a'; x.shadowBlur = 40; x.shadowOffsetY = 14;
-    const g = x.createLinearGradient(px, py, px + w, py);
-    g.addColorStop(0, '#b5bdbd'); g.addColorStop(.08, C.paper); g.addColorStop(.87, '#d6dcd8'); g.addColorStop(1, '#b6c2c1');
-    x.fillStyle = g; x.fillRect(px, py, w, h); x.restore();
-    x.strokeStyle = '#f4f4e744'; x.strokeRect(px, py, w, h);
-  }
-  // A cloth-bound process book opens to a genuine requirement and implementation quote.
-  function book(x, t) {
-    const opening = ss(t, 4.6, 6.3), reveal = ss(t, 10.6, 12.2), close = ss(t, 23.3, 24.6);
-    x.save(); x.globalAlpha *= 1 - close;
-    x.beginPath(); x.rect(105, 145, 1710, 690); x.clip();
-    const focusIssue = ss(t, 6.3, 7.7) * (1 - ss(t, 10.6, 12.2));
-    const focusPR = ss(t, 10.6, 12.2) * (1 - ss(t, 19.2, 20.5));
-    const scale = lerp(.93, 1, ss(t, 0, 3)) + .14 * focusIssue + .1 * focusPR;
-    x.translate(960 + 115 * focusIssue - 85 * focusPR, 440);
-    x.scale(scale, scale); x.translate(-960, -440);
-    for (let i = 5; i >= 1; i--) {
-      x.fillStyle = i % 2 ? '#9aa9a7' : '#4e6265';
-      x.fillRect(252 - i * 2, 174 + i * 3, 1416 + i * 4, 570);
-    }
-    x.fillStyle = '#173743'; x.fillRect(236, 168, 1448, 592);
-    paper(x, 258, 178, 700, 560); paper(x, 962, 178, 700, 560);
-    const shade = x.createLinearGradient(916, 0, 1007, 0);
-    shade.addColorStop(0, '#07192400'); shade.addColorStop(.5, '#07192499'); shade.addColorStop(1, '#07192400');
-    x.fillStyle = shade; x.fillRect(916, 178, 91, 560);
-    x.fillStyle = '#a68753'; x.fillRect(1570, 714, 34, 59);
-    x.beginPath(); x.moveTo(1570, 773); x.lineTo(1587, 757); x.lineTo(1604, 773); x.fillStyle = '#02070e'; x.fill();
-    text(x, '需求 / ISSUE', 308, 223, 25, '#466679', 'VK Mono');
-    text(x, '#3', 308, 302, 94, reveal > .1 ? '#805c20' : '#164e65', 'VK Mono', 500);
-    text(x, '项目证据同步与关联', 308, 389, 39, C.ink, 'VK Serif', 600);
-    line(x, 308, 430, 902, 430, '#3c61765c');
-    text(x, '目标 · 节选整理', 308, 477, 26, '#527281');
-    text(x, '形成最小可用的项目证据链', 308, 524, 32);
-    text(x, '从公开 GitHub 仓库同步', 308, 572, 29);
-    text(x, 'Issue、Commit、PR 与测试状态', 308, 618, 27);
-    text(x, '01 / 开发从需求开始', 308, 695, 23, '#496877');
-    text(x, '实现 / PULL REQUEST', 1017, 223, 25, '#466679', 'VK Mono');
-    text(x, '#4', 1017, 302, 94, '#164e65', 'VK Mono', 500);
-    text(x, '项目证据同步与审阅', 1017, 389, 39, C.ink, 'VK Serif', 600);
-    text(x, '标题中文转述 · 正文原文如下', 1017, 434, 23, '#527281');
-    x.save(); x.globalAlpha *= reveal;
-    x.fillStyle = '#b7964c38'; x.fillRect(1004, 485, 540 * ss(t, 11, 12.1), 79);
-    text(x, 'Closes #3.', 1017, 528, 62, '#2b414d', 'VK Mono', 500);
-    text(x, '“关闭需求 #3”', 1017, 608, 32, '#527281');
-    text(x, '编号引用的中文释义', 1017, 654, 24, '#527281');
-    x.restore();
-    text(x, '02 / 修改留下来路', 1017, 695, 23, '#496877');
-    if (opening < 1) {
-      x.save(); const w = 1404 * Math.cos(opening * Math.PI / 2);
-      x.translate(258, 178); x.scale(Math.max(.001, w / 1404), 1);
-      x.fillStyle = '#0c2232'; x.fillRect(0, 0, 1404, 560);
-      x.drawImage(home, 213, 7, 978, 550);
-      x.fillStyle = '#a1ccd944'; x.fillRect(0, 0, 10, 560);
-      x.strokeStyle = '#6ea8b9'; x.lineWidth = 2; x.strokeRect(0, 0, 1404, 560); x.restore();
-    }
-    if (reveal > 0) {
-      x.save(); x.globalAlpha *= reveal; x.setLineDash([10, 9]);
-      line(x, 938, 310, 982, 528, '#597b85', 2); x.setLineDash([]); x.restore();
-    }
-    const inspect = ss(t, 19.2, 20.3);
-    if (inspect > 0) {
-      x.globalAlpha *= inspect; x.fillStyle = '#102c3b'; x.fillRect(682, 754, 557, 66);
-      text(x, '引用可找到 · 关系仍需人工核对', 712, 788, 29, '#e0e7de');
-    }
-    x.restore();
-  }
+
+  const MARKS = [
+    { t: 30.0, no: '01', zh: '需', en: 'THE ASK' },
+    { t: 78.5, no: '02', zh: '线', en: 'THE LINE' },
+    { t: 150.0, no: '03', zh: '验', en: 'THE PROOF' },
+    { t: 262.0, no: '04', zh: '界', en: 'THE EDGE' },
+  ];
+
+  // 真实提交的相对分钟（2026-10-16 10:25 +08 起，最后一次 10-17 15:14）
+  window.PTM_COMMITS = [0.0, 0.2, 6.4, 7.0, 10.3, 239.3, 239.4, 242.8, 252.8, 252.9, 255.3, 606.7, 614.3, 626.9, 627.0, 627.0, 630.5, 656.3, 656.3, 656.4, 662.1, 686.3, 688.3, 691.1, 692.2, 704.2, 717.4, 1340.7, 1340.7, 1342.0, 1346.3, 1354.4, 1356.0, 1367.1, 1381.4, 1394.9, 1416.4, 1424.3, 1651.8, 1654.4, 1656.8, 1658.8, 1666.8, 1683.9, 1689.0, 1696.3, 1705.6, 1729.2];
+
+  /* 素材：真实页面截图 */
+  const load = src => new Promise((ok, bad) => { const im = new Image(); im.onload = () => ok(im); im.onerror = bad; im.src = src; });
+  const [home, issue3, pr4, runs] = await Promise.all([
+    load('assets/product-home-2026-10-17.png'),
+    load('assets/issue-3.png'),
+    load('assets/pr-4.png'),
+    load('assets/actions-runs.png'),
+  ]);
+  window.PTM_ASSETS = { home, issue3, pr4, runs };
+
   VK.film({
-    dur: 30, fps: 30, theme: 'night', bloom: .28, grain: .025,
-    meta: { title: '开发的来路', revision: 'review-2', case: 'Issue #3 / PR #4', reenactment: true },
+    dur: 300, fps: 30, theme: 'night', bloom: .2, grain: .03,
+    meta: {
+      title: '开发的来路', revision: 'full-1',
+      order: '动机 → 技术路线 → 实验 → 边界',
+      case: 'project-time-machine', reenactment: true,
+    },
     draw(fr, t) {
-      fr.look.bgo = { core: .65, stars: .14 };
-      fr.look.under = x => book(x, t);
-      const source = t < 4.6 ? '真实本地首页 · 2026-10-17 · 首页含样例数据'
-        : 'GitHub 原文节选 · Issue #3 / PR #4 · 证据组织示意';
-      fr.text(source, 960, 105, { font: 'sansr', size: 25, color: '#8eacb9', a: 1 - ss(t, 23.3, 24.1) });
+      if (t < 30) {
+        CH.open(fr, t);
+      } else {
+        fr.look.bg = 'flat';
+        fr.look.bgo = { color: '#030508' };
+        fr.look.bloom = .18;
+        fr.look.under = x => WS.room(x, t, { warm: 1, top: 690 });
+        const a01 = fade(t, 30, 78.5, .5, .8);
+        const a02 = fade(t, 78.5, 150.0, .5, .8);
+        const a03 = fade(t, 150.0, 262.0, .5, .8);
+        const a04 = fade(t, 262.0, 300, .5, .3);
+        if (a01 > 0) fr.g({ a: a01 }, () => CH.pull(fr, t));
+        if (a02 > 0) fr.g({ a: a02 }, () => CH.route(fr, t));
+        if (a03 > 0) fr.g({ a: a03 }, () => CH.lab(fr, t));
+        if (a04 > 0) fr.g({ a: a04 }, () => CH.edge(fr, t));
+      }
+      if (t >= 30) K.chapterMark(fr, t, MARKS, 294);
       K.subs(fr, t, SUBS, 'night');
-      if (t >= 23.5) {
-        K.titleNight(fr, t - 23.5, { zh: '开发的来路', en: '', sub: '从一次修改，回到最初的需求', cy: 426, size: 113, track: 14 });
-        fr.text('PROJECT TIME MACHINE', 960, 715, {font: 'mono', size: 25, track: 5, color: '#91aab8', a: ss(t, 27.5, 28.2)});
-        fr.text('原文来源  github.com/YYJ0226/project-time-machine · issues/3 · pull/4', 960, 770,
-          { font: 'sansr', size: 23, color: '#839aa8', a: ss(t, 27.5, 28.1) });
+      // 章与章之间暗一下
+      if (t >= 78.5) {
+        const d = K.dips(t, [78.5, 150.0, 262.0], .5);
+        if (d < 1) fr.look.post = x => { x.fillStyle = `rgba(0,0,0,${(1 - d) * .8})`; x.fillRect(0, 0, 1920, 1080); };
       }
     },
   });

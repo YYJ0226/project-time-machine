@@ -25,4 +25,4 @@ jobs:
       - run: node --test video-vibe/source.check.mjs
       - run: node --check scripts/fetch-course-music.mjs
       - run: python -m unittest discover -s video-vibe -p test_server.py
-      - run: python -m py_compile video-vibe/engine/render.py video-vibe/prepare_audio.py video-vibe/verify.py
+      - run: python -m py_compile video-vibe/engine/render.py video-vibe/prepare_audio.py video-vibe/verify.py video-vibe/verify_export.py video-vibe/qa_compare.py

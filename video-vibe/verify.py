@@ -15,12 +15,12 @@ assert Path(handler.translate_path("/")).name == "index.html"
 assert Path(handler.translate_path("/film.js")).name == "film.js"
 
 def inspect(pg):
-    assert pg.evaluate("END === 30 && FPS === 30")
+    assert pg.evaluate("END === 300 && FPS === 30 && document.getElementById('stage').width === 1920 && document.getElementById('stage').height === 1080")
     subs = pg.evaluate("PTM_SUBTITLES")
     last = 0
     for sub in subs:
         sentence = re.sub(r"[{}!]", "", sub["zh"])
-        assert 0 <= last <= sub["a"] < sub["b"] <= 23.5
+        assert 0 <= last <= sub["a"] < sub["b"] <= 294
         assert sub["b"]-sub["a"] >= 3
         assert len(sentence) <= 28
         width = pg.evaluate("""s => { const x=document.createElement('canvas').getContext('2d');
@@ -29,8 +29,8 @@ def inspect(pg):
         last = sub["b"]
     for font in ['400 41px "VK Serif"', '400 32px "VK Sans"', '400 62px "VK Mono"']:
         assert pg.evaluate("font => document.fonts.check(font, '开发A3')", font), font
-    assert len(subs) == 5
-    print("PASS: 5 subtitles, reading windows, widths, fonts, 1080p/30fps canvas contract")
+    assert len(subs) >= 50
+    print("PASS:", len(subs), "subtitles, reading windows, widths, fonts, 1080p/30fps canvas contract")
 
 renderer.with_page(root, inspect)
 print("PASS: local server traversal and source-file boundaries")
