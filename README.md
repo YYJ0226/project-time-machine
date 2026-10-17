@@ -52,7 +52,8 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
   - [x] 检查点 B：首页登录／工作台入口修复并上线
   - [ ] 检查点 B：排除并发操作后的重新登录稳定性、AI 人工审阅写入复核
   - 手机／其他网络验收：本人明确暂不需要，延期，不计为通过
-  - [ ] 检查点 C：实际录屏、成片验收与正式版本发布
+  - [ ] 检查点 C1：录屏分镜、检查表与可复现课程资料准备包（当前子阶段）
+  - [ ] 检查点 C2：实际录屏、成片验收与正式版本发布
 
 线上入口：[https://project-time-machine.vercel.app](https://project-time-machine.vercel.app)。
 2026-10-17 已部署到个人 Vercel Hobby 项目，公开首页、登录页与健康探针可访问；
@@ -66,7 +67,10 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
 本次为 CLI 手动发布，尚未接通 Git 推送自动部署。线上暂未配置 DeepSeek 密钥，不能生成新 AI 草稿；本地配置不受影响。
 部署版本、检查结果与剩余事项见[阶段六检查点 B 记录](docs/phase-6b-acceptance.md)。
 
-当前首页中的项目数据均为界面示例，不代表功能已经接入。
+当前首页中的项目数据均为界面示例；真实功能请登录工作台使用，样例不是你的仓库事实。
+
+2026-10-17 本人回复“验证好了，继续”，已将首页入口记为本人验收通过；未据此把会话复核或 AI 审阅写入等未完成项改为通过。
+当前进入 C1 录屏准备，不改线上功能，不新增 AI 调用。本人指定五至七分钟、AI 配音，按动机与需求、技术路线、实验展示展开；拟以番茄钟真实迭代作为主案例。
 
 2026-10-16 联调记录：GitHub 登录已进入真实工作台，当前用户公开仓库可读取；
 课程仓库 `YYJ0226/project-time-machine` 已导入，服务重启及页面刷新后仍然保留。
@@ -143,6 +147,19 @@ npm run test:http
 npm audit --omit=dev --audit-level=high
 ```
 
+## 准备课程录屏材料
+
+在干净、已提交的工作区运行：
+
+```bash
+npm run prepare:course
+```
+
+生成被 Git 与 Vercel 忽略的 `artifacts/course-delivery/kit-<随机后缀>/`，包含七份已提交白名单文件、近期 Git SHA 清单与文件哈希。
+不包含完整源码、真实数据库导出、浏览器会话或视频，也不会宣称部署和 CI 已通过。
+若工作区未提交、输出目录为链接，或资料出现常见密钥／教师能力链接，则停止，不自动修复或提交。
+详见[交付说明](docs/course-delivery.md)；生成后先人工核对，再按[检查表](docs/recording-checklist.md)实际排练和录制。
+
 ## 文档索引
 
 - [产品简述](docs/product-brief.md)
@@ -158,6 +175,10 @@ npm audit --omit=dev --audit-level=high
 - [阶段六检查点 B 线上部署与验收记录](docs/phase-6b-acceptance.md)
 - [Vercel 发布与回滚手册](docs/deploy-vercel.md)
 - [课程演示与录屏讲稿](docs/demo-script.md)
+- [课程录屏资料准备与交付命令](docs/course-delivery.md)
+- [录制前、成片回看及录后检查表](docs/recording-checklist.md)
+- [视频工具调查、六分半分镜与番茄钟实验计划](docs/video-production-plan.md)
+- [阶段 6C1 准备工具与验收记录](docs/phase-6c-preparation.md)
 - [安全检查与已知开发依赖告警](docs/security.md)
 
 ## Git 协作约定

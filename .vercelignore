@@ -9,6 +9,7 @@ supabase/.temp
 coverage
 out
 build
+artifacts
 *.tsbuildinfo
 *.pem
 *.log
