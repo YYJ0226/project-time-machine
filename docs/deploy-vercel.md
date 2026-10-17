@@ -1,6 +1,6 @@
 # Vercel 发布手册
 
-状态（2026-10-17）：已创建个人 Hobby 项目并发布生产部署。唯一正式入口为 [https://project-time-machine.vercel.app](https://project-time-machine.vercel.app)。已验证公开 HTTP 边界、真实项目同步与时间线、教师快照匿名访问和撤销；本人确认 Edge 登录及两种下载正常。手机／其他网络、退出后权限回收与线上审阅写入尚未验收，见[检查点 B 记录](phase-6b-acceptance.md)。
+状态（2026-10-17）：已创建个人 Hobby 项目并发布生产部署。唯一正式入口为 [https://project-time-machine.vercel.app](https://project-time-machine.vercel.app)。已验证公开 HTTP 边界、真实项目同步与时间线、教师快照匿名访问和撤销；本人确认 Edge 登录及两种下载正常。追加验证关联审阅写入与退出后门禁，并上线首页登录入口修复。重新登录稳定性待排除并发操作后复核；手机／其他网络按本人要求延期，见[检查点 B 记录](phase-6b-acceptance.md)。
 
 ## 账号与仓库
 
