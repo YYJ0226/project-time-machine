@@ -43,9 +43,18 @@ Project Time Machine 不只是“项目做完后的展示页”。它希望把�
   - 真实 AI 调用记录接入时间线泳道
 - [ ] 阶段六：质量加固、部署与演示视频
   - [x] 检查点 A：生产回调、安全响应头、AI 额度白名单、健康探针与隔离 HTTP 回归
-  - [x] 检查点 A：Vercel 发布手册、配置门禁及录屏讲稿（待用户验收）
-  - [ ] 检查点 B：Vercel 账号授权、正式部署与跨设备联调
-  - [ ] 检查点 B：实际录屏、成片验收与正式版本发布
+  - [x] 检查点 A：Vercel 发布手册、配置门禁及录屏讲稿（已验收合并）
+  - [x] 检查点 B：Vercel 账号授权、生产部署和匿名 HTTP 检查
+  - [x] 检查点 B：真实生产 GitHub 登录（本人在 Edge 确认成功）
+  - [ ] 检查点 B：项目操作与跨设备教师访问验收
+  - [ ] 检查点 C：实际录屏、成片验收与正式版本发布
+
+线上入口：[https://project-time-machine.vercel.app](https://project-time-machine.vercel.app)。
+2026-10-17 已部署到个人 Vercel Hobby 项目，公开首页、登录页与健康探针可访问；
+未登录工作台和下载权限限制已验证，本人已确认 Edge 生产 GitHub 登录成功。
+登录后的完整业务和跨设备流程仍待验收，不能将探针通过当作完整可用性证明。
+本次为 CLI 手动发布，尚未接通 Git 推送自动部署。线上暂未配置 DeepSeek 密钥，不能生成新 AI 草稿；本地配置不受影响。
+部署版本、检查结果与剩余事项见[阶段六检查点 B 记录](docs/phase-6b-acceptance.md)。
 
 当前首页中的项目数据均为界面示例，不代表功能已经接入。
 
@@ -128,6 +137,7 @@ npm audit --omit=dev --audit-level=high
 - [阶段四时间线验收与演示步骤](docs/phase-4-acceptance.md)
 - [阶段五配置、分享边界与验收步骤](docs/phase-5-acceptance.md)
 - [阶段六检查点 A 验收与剩余事项](docs/phase-6a-acceptance.md)
+- [阶段六检查点 B 线上部署与验收记录](docs/phase-6b-acceptance.md)
 - [Vercel 发布与回滚手册](docs/deploy-vercel.md)
 - [课程演示与录屏讲稿](docs/demo-script.md)
 - [安全检查与已知开发依赖告警](docs/security.md)
