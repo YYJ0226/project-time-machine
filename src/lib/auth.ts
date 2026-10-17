@@ -9,7 +9,9 @@ const GITHUB_LOGIN_PATTERN = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/;
 
 export function extractGitHubLogin(user: User): string | null {
   // Editable user metadata is never an authorization source.
-  const identity = user.identities?.find(identity => identity.provider === "github");
+  const identity = user.identities?.find(
+    (identity) => identity.provider === "github",
+  );
   const candidates = [
     identity?.identity_data?.user_name,
     identity?.identity_data?.preferred_username,

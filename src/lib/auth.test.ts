@@ -18,7 +18,12 @@ beforeEach(() => {
 afterEach(() => vi.restoreAllMocks());
 describe("authentication failure isolation", () => {
   it("never grants identity from editable user metadata", () => {
-    const spoofed = { user_metadata: { user_name: "allowed-user" }, identities: [{ provider: "github", identity_data: { user_name: "actual-user" } }] } as unknown as User;
+    const spoofed = {
+      user_metadata: { user_name: "allowed-user" },
+      identities: [
+        { provider: "github", identity_data: { user_name: "actual-user" } },
+      ],
+    } as unknown as User;
     expect(extractGitHubLogin(spoofed)).toBe("actual-user");
     expect(extractGitHubLogin({ ...spoofed, identities: [] })).toBeNull();
   });
@@ -40,13 +45,28 @@ describe("authentication failure isolation", () => {
   });
   it("requires a GitHub identity from the verified server user", async () => {
     mocks.getUser.mockResolvedValue({
-      data: { user: { id: "owned", identities: [{ provider: "github", identity_data: { user_name: "student" } }] } },
+      data: {
+        user: {
+          id: "owned",
+          identities: [
+            { provider: "github", identity_data: { user_name: "student" } },
+          ],
+        },
+      },
       error: null,
     });
     expect((await requireGitHubUser()).githubLogin).toBe("student");
     mocks.getUser.mockResolvedValue({
       data: {
-        user: { id: "owned", identities: [{ provider: "github", identity_data: { user_name: "invalid login" } }] },
+        user: {
+          id: "owned",
+          identities: [
+            {
+              provider: "github",
+              identity_data: { user_name: "invalid login" },
+            },
+          ],
+        },
       },
       error: null,
     });
