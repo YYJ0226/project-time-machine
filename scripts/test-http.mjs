@@ -198,7 +198,13 @@ try {
       for (const path of ["/", "/login"]) {
         const response = await request(path);
         assert.equal(response.status, 200);
-        assert.match(await response.text(), /Project Time Machine/);
+        const html = await response.text();
+        assert.match(html, /Project Time Machine/);
+        if (path === "/") {
+          assert.match(html, /<a\b[^>]*href="\/login"[^>]*>登录<\/a>/);
+          assert.match(html, /<a\b[^>]*href="\/app"[^>]*>进入工作台<\/a>/);
+          assert.match(html, /样例不代表你的项目数据/);
+        }
       }
     },
   );
