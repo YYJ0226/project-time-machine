@@ -1,0 +1,28 @@
+name: Canvas film source checks
+
+on:
+  pull_request:
+    paths: ['video-vibe/**', 'scripts/fetch-course-music.mjs', '.github/workflows/video-vibe.yml']
+  push:
+    branches: [main]
+    paths: ['video-vibe/**', 'scripts/fetch-course-music.mjs', '.github/workflows/video-vibe.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - run: node --test video-vibe/source.check.mjs
+      - run: node --check scripts/fetch-course-music.mjs
+      - run: python -m unittest discover -s video-vibe -p test_server.py
+      - run: python -m py_compile video-vibe/engine/render.py video-vibe/prepare_audio.py video-vibe/verify.py

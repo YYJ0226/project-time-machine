@@ -1,0 +1,5 @@
+engine/fonts/
+renders/
+review*/
+__pycache__/
+*.pyc

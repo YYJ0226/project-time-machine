@@ -166,6 +166,8 @@ npm run prepare:course
 
 ## 文档索引
 
+- [新版 Vibe 三十秒样片：预览、复现与边界](video-vibe/README.md)
+- [《开发的来路》逐镜分镜](docs/vibe-opening-storyboard.md)
 - [产品简述](docs/product-brief.md)
 - [技术架构](docs/architecture.md)
 - [阶段路线图](docs/roadmap.md)

@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "artifacts/**",
     "video/**",
+    "video-vibe/**",
     "next-env.d.ts",
   ]),
 ]);
