@@ -189,7 +189,11 @@ export default async function DeliveryPage({
           <div className={styles.sectionHeading}>
             <h2 id="publish-title">交付控制</h2>
             <span>
-              {snapshot.narrative ? "已确认文字可交付" : "仅交付原始证据"}
+              {snapshot.narrative
+                ? snapshot.narrative.basis?.freshness === "matching"
+                  ? "已确认文字可交付"
+                  : "包含历史确认文字，请复核"
+                : "仅交付原始证据"}
             </span>
           </div>
           <p>

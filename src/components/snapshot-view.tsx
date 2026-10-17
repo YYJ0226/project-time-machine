@@ -1,5 +1,6 @@
 import {
   kindLabels,
+  narrativeVersionNotice,
   readableNarrative,
   safeGitHubUrl,
   type ReviewSnapshot,
@@ -43,6 +44,24 @@ export function SnapshotView({
       {narrative && readable ? (
         <section className={styles.narrative}>
           <p className={styles.label}>{narrative.label}</p>
+          <div
+            className={styles.boundary}
+            role="note"
+            aria-label="AI 版本与样本范围"
+          >
+            <p>{narrativeVersionNotice(narrative.basis)}</p>
+            {narrative.basis ? (
+              <p>
+                生成时间：
+                {new Date(narrative.basis.generatedAt).toLocaleString("zh-CN", {
+                  timeZone: "Asia/Shanghai",
+                  hour12: false,
+                })}
+                （北京时间） · 生成输入 {narrative.basis.inputCount} 条；
+                下方原始证据为本快照的 {evidence.length} 条，不应混同。
+              </p>
+            ) : null}
+          </div>
           <h3>阶段摘要</h3>
           <p>{readable.summary}</p>
           <h3>待核对提醒</h3>

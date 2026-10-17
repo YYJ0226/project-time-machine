@@ -1,6 +1,7 @@
 import "server-only";
 import { notFound } from "next/navigation";
 import { requireGitHubUser } from "./auth";
+import { narrativeBasis } from "./deepseek";
 import {
   buildSnapshot,
   type DeliveryEvidence,
@@ -63,7 +64,7 @@ export async function loadDelivery(projectId: string) {
   // Fetch approved revision independently, so 30 later drafts cannot hide the published revision.
   const { data: approved, error: approvedError } = await supabase
     .from("ai_runs")
-    .select("reviewed_output,reviewed_at")
+    .select("reviewed_output,reviewed_at,created_at,evidence_ids,input_hash")
     .eq("project_id", projectId)
     .eq("owner_id", user.id)
     .eq("review_status", "approved")
@@ -79,6 +80,7 @@ export async function loadDelivery(projectId: string) {
       ? {
           reviewedAt: approved.reviewed_at,
           content: approved.reviewed_output as Narrative,
+          basis: narrativeBasis(items.data as DeliveryEvidence[], approved),
         }
       : null,
   );

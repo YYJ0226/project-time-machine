@@ -7,6 +7,7 @@ import {
   restoreReferences,
   redact,
   safeGitHubUrl,
+  narrativeVersionNotice,
   type DeliveryEvidence,
 } from "./delivery";
 
@@ -69,6 +70,64 @@ describe("delivery projection", () => {
     expect(snapshot.links).toEqual([]);
     expect(snapshot.narrative?.label).toContain("AI 生成");
     expect(snapshot.narrative?.content).toEqual(content);
+  });
+  it("allowlists provenance and preserves the exact approved text", () => {
+    const basis = {
+      generatedAt: "2026-10-16T10:00:00Z",
+      inputCount: 37,
+      freshness: "changed" as const,
+      input_hash: "private-hash",
+      output: "private-prompt",
+    };
+    const snapshot = buildSnapshot(project, [item], [], {
+      reviewedAt: "2026-10-16T11:00:00Z",
+      content,
+      basis,
+    });
+    expect(snapshot.narrative?.basis).toEqual({
+      generatedAt: basis.generatedAt,
+      inputCount: 37,
+      freshness: "changed",
+    });
+    expect(snapshot.narrative?.content).toEqual(content);
+    expect(JSON.stringify(snapshot)).not.toMatch(/private-hash|private-prompt/);
+    const frozen = JSON.stringify(snapshot);
+    buildSnapshot(project, [{ ...item, state: "merged" }], [], null);
+    expect(JSON.stringify(snapshot)).toBe(frozen);
+  });
+  it.each(["report", "script"] as const)(
+    "includes the historical warning, generation time and count in %s exports",
+    (format) => {
+      const snapshot = buildSnapshot(project, [item], [], {
+        reviewedAt: "2026-10-16T11:00:00Z",
+        content,
+        basis: {
+          generatedAt: "2026-10-16T10:00:00Z",
+          inputCount: 37,
+          freshness: "changed",
+        },
+      });
+      const output = exportMarkdown(snapshot, format);
+      expect(output).toContain("历史 AI 版本");
+      expect(output).toContain("不代表项目最新状态");
+      expect(output).toContain("生成时间：2026-10-16T10:00:00Z");
+      expect(output).toContain("生成输入：37 条");
+      expect(output.indexOf("历史 AI 版本")).toBeLessThan(output.indexOf("> "));
+    },
+  );
+  it("treats old snapshots without provenance as unknown, never implicitly current", () => {
+    const snapshot = buildSnapshot(project, [item], [], {
+      reviewedAt: "2026-10-16T11:00:00Z",
+      content,
+    });
+    expect(exportMarkdown(snapshot, "report")).toContain("缺少样本版本信息");
+    expect(
+      narrativeVersionNotice({
+        generatedAt: "2026-10-16T10:00:00Z",
+        inputCount: 1,
+        freshness: "matching",
+      }),
+    ).toContain("不代表结论正确");
   });
   it("rejects malformed output, fabricated citations and embedded foreign UUIDs", () => {
     expect(() => parseNarrative({ ...content, summary: "" }, [id])).toThrow(
