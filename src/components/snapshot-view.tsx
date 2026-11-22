@@ -7,6 +7,13 @@ import {
 } from "@/lib/delivery";
 import styles from "./snapshot-view.module.css";
 
+const kindTone: Record<string, "requirement" | "code" | "verification"> = {
+  issue: "requirement",
+  commit: "code",
+  pull_request: "code",
+  check: "verification",
+};
+
 export function SnapshotView({
   snapshot,
   mainHeading = false,
@@ -17,35 +24,50 @@ export function SnapshotView({
   const { project, evidence, links, narrative } = snapshot;
   const readable = narrative ? readableNarrative(narrative.content) : null;
   const Heading = mainHeading ? "h1" : "h2";
+
   return (
     <div className={styles.document}>
-      <div className={styles.title}>
-        <Heading>{project.full_name}</Heading>
+      <div className={styles.titleBar}>
+        <div className={styles.titleMeta}>
+          <Heading>{project.full_name}</Heading>
+          <p>
+            数据截取：
+            {new Date(snapshot.capturedAt).toLocaleString("zh-CN", {
+              timeZone: "Asia/Shanghai",
+              hour12: false,
+            })}
+            （北京时间） · 共 {evidence.length} 条公开证据 · {links.length} 条已确认关系
+          </p>
+        </div>
         <a
+          className={styles.repoButton}
           href={safeGitHubUrl(project.html_url)}
           target="_blank"
           rel="noreferrer"
         >
-          打开公开仓库
+          打开公开仓库 ↗
         </a>
-        <p>
-          数据截取：
-          {new Date(snapshot.capturedAt).toLocaleString("zh-CN", {
-            timeZone: "Asia/Shanghai",
-            hour12: false,
-          })}
-          （北京时间）
-        </p>
       </div>
+
       <div className={styles.boundary}>
         这是已采集公开证据的固定快照，不是实时仓库。未确认 AI
         草稿不在此页；引用只帮助核对，不代表 AI 结论已经得到证明。
       </div>
+
       {narrative && readable ? (
         <section className={styles.narrative}>
-          <p className={styles.label}>{narrative.label}</p>
+          <div className={styles.narrativeHead}>
+            <p className={styles.label}>{narrative.label}</p>
+            <small>
+              人工确认：
+              {new Date(narrative.reviewedAt).toLocaleString("zh-CN", {
+                timeZone: "Asia/Shanghai",
+              })}
+            </small>
+          </div>
+
           <div
-            className={styles.boundary}
+            className={styles.versionNote}
             role="note"
             aria-label="AI 版本与样本范围"
           >
@@ -62,12 +84,20 @@ export function SnapshotView({
               </p>
             ) : null}
           </div>
-          <h3>阶段摘要</h3>
-          <p>{readable.summary}</p>
-          <h3>待核对提醒</h3>
-          <p>{readable.gaps}</p>
-          <details>
-            <summary>讲解稿与引用</summary>
+
+          <div className={styles.narrativeGrid}>
+            <div className={styles.narrativeBlock}>
+              <h3>阶段摘要</h3>
+              <p>{readable.summary}</p>
+            </div>
+            <div className={styles.narrativeBlock}>
+              <h3>待核对提醒</h3>
+              <p>{readable.gaps}</p>
+            </div>
+          </div>
+
+          <details className={styles.scriptDetails}>
+            <summary>讲解稿与引用（{narrative.content.citations.length} 条）</summary>
             <p>{readable.script}</p>
             <ul>
               {narrative.content.citations.map((id, index) => (
@@ -80,31 +110,34 @@ export function SnapshotView({
               ))}
             </ul>
           </details>
-          <small>
-            人工确认：
-            {new Date(narrative.reviewedAt).toLocaleString("zh-CN", {
-              timeZone: "Asia/Shanghai",
-            })}
-          </small>
         </section>
       ) : (
         <p className={styles.boundary}>
           尚无人工确认的 AI 文字。以下只展示原始证据。
         </p>
       )}
-      <section>
-        <h3>
-          证据时间线 <small>{evidence.length} 条</small>
-        </h3>
+
+      <section className={styles.sectionBlock}>
+        <div className={styles.sectionTitle}>
+          <h3>证据时间线</h3>
+          <small>{evidence.length} 条</small>
+        </div>
+
         <ol className={styles.timeline}>
           {[...evidence]
             .sort(
               (a, b) => Date.parse(a.occurred_at) - Date.parse(b.occurred_at),
             )
             .map((item) => (
-              <li key={item.id} id={`evidence-${item.id}`}>
-                <div>
-                  <span>{kindLabels[item.kind]}</span>
+              <li
+                key={item.id}
+                id={`evidence-${item.id}`}
+                data-signal={kindTone[item.kind] ?? "verification"}
+              >
+                <div className={styles.eventMeta}>
+                  <span className={styles.kindChip}>
+                    {kindLabels[item.kind]}
+                  </span>
                   <time dateTime={item.occurred_at}>
                     {new Date(item.occurred_at).toLocaleString("zh-CN", {
                       timeZone: "Asia/Shanghai",
@@ -113,23 +146,27 @@ export function SnapshotView({
                   </time>
                 </div>
                 <a
+                  className={styles.eventTitle}
                   href={safeGitHubUrl(item.source_url)}
                   target="_blank"
                   rel="noreferrer"
                 >
                   {item.title}
                 </a>
-                <p>
+                <p className={styles.eventSub}>
                   {item.state ?? "recorded"} <code>{item.id.slice(0, 8)}</code>
                 </p>
               </li>
             ))}
         </ol>
       </section>
-      <section>
-        <h3>
-          人工确认的关系 <small>{links.length} 条</small>
-        </h3>
+
+      <section className={styles.sectionBlock}>
+        <div className={styles.sectionTitle}>
+          <h3>人工确认的关系</h3>
+          <small>{links.length} 条</small>
+        </div>
+
         {links.length ? (
           <ul className={styles.links}>
             {links.map((link, i) => (
@@ -152,7 +189,9 @@ export function SnapshotView({
             ))}
           </ul>
         ) : (
-          <p>暂无已确认关系，不将关联建议当作事实展示。</p>
+          <p className={styles.emptyText}>
+            暂无已确认关系，不将关联建议当作事实展示。
+          </p>
         )}
       </section>
     </div>

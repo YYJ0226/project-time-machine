@@ -1,32 +1,84 @@
 .shell {
   min-height: 100vh;
-  background: #07111f;
-  color: #eaf2f5;
-  padding: 32px max(20px, calc((100vw - 1000px) / 2));
+  color: var(--text);
+  padding: 0 24px 72px;
   font-size: 15px;
   line-height: 1.8;
 }
-.shell header {
+
+.container {
+  width: min(1040px, 100%);
+  margin-inline: auto;
+}
+
+.header {
+  min-height: 76px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
-  border-bottom: 1px solid #243849;
-  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
 }
-.shell header span {
-  color: #9bafc5;
-  font-size: 13px;
+
+.badge {
+  padding: 5px 14px;
+  border: 1px solid rgba(100, 216, 209, 0.35);
+  border-radius: 999px;
+  background: rgba(100, 216, 209, 0.08);
+  color: var(--cyan);
+  font-size: 0.8rem;
+  font-weight: 540;
 }
+
 .notice {
-  color: #9bafc5;
-  font-size: 13px;
-  padding: 16px 0;
+  color: var(--text-3);
+  font-size: 0.86rem;
+  margin: 20px 0;
 }
-.shell footer {
-  margin-top: 32px;
+
+.dossier {
+  padding: clamp(22px, 3.6vw, 40px);
+  border: 1px solid var(--border-strong);
+  border-top: 3px solid var(--cyan);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(16, 30, 50, 0.84), rgba(8, 17, 31, 0.92));
+  box-shadow: var(--shadow-lg);
+}
+
+.footer {
+  margin-top: 28px;
   padding-top: 18px;
-  border-top: 1px solid #243849;
-  font-size: 12px;
-  color: #9bafc5;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-3);
+}
+
+.stateCard {
+  margin-top: 64px;
+  padding: clamp(28px, 5vw, 48px);
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(16, 30, 50, 0.84), rgba(8, 17, 31, 0.92));
+  box-shadow: var(--shadow-lg);
+}
+
+.stateCode {
+  margin: 0 0 14px;
+  color: var(--amber);
+  font-family: var(--font-code);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+}
+
+.stateCard h1 {
+  margin: 0 0 12px;
+  font-size: clamp(1.7rem, 3.6vw, 2.4rem);
+  font-weight: 640;
+}
+
+.stateCard p:last-child {
+  margin: 0;
+  color: var(--text-2);
 }

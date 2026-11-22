@@ -1,8 +1,59 @@
 @import "tailwindcss";
 
+/*
+ * Project Time Machine design tokens.
+ * One palette for every page: deep-orbit background, glass instruments,
+ * and four signal colours that always mean the same evidence lane.
+ */
 :root {
-  --background: #07111f;
-  --foreground: #eaf2f5;
+  --background: #050b16;
+  --foreground: #edf3f8;
+
+  --bg: #050b16;
+  --bg-elev: #08111f;
+  --surface: rgba(12, 24, 41, 0.72);
+  --surface-strong: #0b1729;
+  --surface-raised: rgba(18, 34, 56, 0.78);
+  --surface-hover: rgba(24, 44, 72, 0.82);
+  --border: rgba(148, 178, 214, 0.13);
+  --border-strong: rgba(148, 178, 214, 0.24);
+  --border-focus: rgba(139, 145, 255, 0.55);
+
+  --text: #edf3f8;
+  --text-2: #b6c4d3;
+  --text-3: #8193a8;
+  --text-4: #5d6f84;
+
+  /* Signal colours — keep identical to src/lib/timeline.ts lanes. */
+  --signal-requirement: #f2b84b;
+  --signal-code: #8b91ff;
+  --signal-verification: #64d8d1;
+  --signal-ai: #94a3b8;
+  --violet: #8b91ff;
+  --amber: #f2b84b;
+  --cyan: #64d8d1;
+  --danger: #ff8e80;
+  --success: #64d8d1;
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --shadow-sm: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 24px -12px rgba(0, 0, 0, 0.55);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 40px 120px -30px rgba(0, 0, 0, 0.8);
+
+  --gradient-signal: linear-gradient(100deg, #f2b84b 0%, #edf3f8 32%, #a9adff 62%, #64d8d1 100%);
+  --gradient-brand: linear-gradient(135deg, #8b91ff 0%, #64d8d1 100%);
+
+  --font-ui: var(--font-geist-sans), "PingFang SC", "HarmonyOS Sans SC", "MiSans",
+    "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  --font-code: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --page-width: 1240px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
@@ -18,13 +69,56 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
+  background: var(--bg);
 }
 
 body {
+  position: relative;
   margin: 0;
-  background: var(--background);
+  /* Transparent so the fixed ambient layers (z-index -1) stay visible. */
+  background: transparent;
   color: var(--foreground);
-  font-family: var(--font-geist-sans), "Microsoft YaHei UI", "PingFang SC", sans-serif;
+  font-family: var(--font-ui);
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient observatory light shared by every page. */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  background:
+    radial-gradient(60rem 36rem at 82% -8%, rgba(139, 145, 255, 0.14), transparent 62%),
+    radial-gradient(46rem 30rem at -6% 18%, rgba(100, 216, 209, 0.08), transparent 60%),
+    radial-gradient(50rem 32rem at 50% 118%, rgba(242, 184, 75, 0.06), transparent 62%),
+    linear-gradient(180deg, #050b16 0%, #060d1a 48%, #050a14 100%);
+}
+
+body::after {
+  background-image:
+    linear-gradient(rgba(148, 178, 214, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 178, 214, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 0%, transparent 78%);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 button,
@@ -33,12 +127,49 @@ a {
 }
 
 ::selection {
-  background: rgba(139, 145, 255, 0.35);
+  background: rgba(139, 145, 255, 0.38);
   color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+/* Thin, quiet scrollbars that match the instruments. */
+* {
+  scrollbar-color: rgba(148, 178, 214, 0.22) transparent;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 178, 214, 0.22);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 178, 214, 0.36);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
